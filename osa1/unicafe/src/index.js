@@ -2,19 +2,20 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
 const Statistic = ( { text, value } ) => {
-  return ( <div><p>{text} {value}</p></div>)
+  return ( <tr><td>{text}</td><td>{value}</td></tr> )
 }
 
 const Statistics = ( { good, neutral, bad, total, points } ) => {
   return ( <div>
     <h1>Statistiikka</h1>
+    <table><tbody>
     <Statistic text='hyvä' value={good} />
     <Statistic text='neutraali' value={neutral} />
     <Statistic text='huono' value={bad} />
     <Statistic text='yhteensä' value={total} />
     <Statistic text='keskiarvo' value={points / total} />
     <Statistic text='positiivisia' value={(good / total * 100) + '%'} />
-  </div>)
+    </tbody></table></div>)
 }
 
 const Button = ( { click, text } ) => {
