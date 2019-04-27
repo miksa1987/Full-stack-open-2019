@@ -10,17 +10,23 @@ const Part = ( { name, exercises }) => {
 }
 
 const Content = () => {
-  const part1 = 'Reactin perusteet'
-  const exercises1 = 10
-  const part2 = 'Tiedonvälitys propseilla'
-  const exercises2 = 7
-  const part3 = 'Komponenttien tila'
-  const exercises3 = 14
+  const part1 = {
+    name: 'Reactin perusteet',
+    exercises: 10
+  }
+  const part2 = {
+    name: 'Tiedonvälitys propseilla',
+    exercises: 7
+  }
+  const part3 = {
+    name: 'Komponenttien tila',
+    exercises: 14
+  }
 
   return (<div>
-    <Part name={part1} exercises={exercises1} />
-    <Part name={part2} exercises={exercises2} />
-    <Part name={part3} exercises={exercises3} />
+    <Part name={part1.name} exercises={part1.exercises} />
+    <Part name={part2.name} exercises={part2.exercises} />
+    <Part name={part3.name} exercises={part3.exercises} />
   </div>)
 }
 
