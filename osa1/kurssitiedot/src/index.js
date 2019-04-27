@@ -22,27 +22,30 @@ const Total = ( { total } ) => {
 }
 
 const App = () => {
-  const course = 'Half Stack -sovelluskehitys'
-  const parts = [
-    {
-      name: 'Reactin perusteet',
-      exercises: 10
-    },
-    {
-      name: 'Tiedonvälitys propseilla',
-      exercises: 7
-    },
-    {
-      name: 'Komponenttien tila',
-      exercises: 14
-    }
-  ]
+  const course = {
+    name: 'Half Stack -sovelluskehitys',
+    parts: [
+      {
+        name: 'Reactin perusteet',
+        exercises: 10
+      },
+      {
+        name: 'Tiedonvälitys propseilla',
+        exercises: 7
+      },
+      {
+        name: 'Komponenttien tila',
+        exercises: 14
+      }
+    ]
+  }
 
-  const total = parts[0].exercises + parts[1].exercises + parts[2].exercises
+  const total = course.parts[0].exercises + course.parts[1].exercises + course.parts[2].exercises
+
   return (
     <div>
-      <Header course={course} />
-      <Content parts={parts} />
+      <Header course={course.name} />
+      <Content parts={course.parts} />
       <Total total={total} />
     </div>
   )
