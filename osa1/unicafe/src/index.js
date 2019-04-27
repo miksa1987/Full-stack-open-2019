@@ -8,8 +8,8 @@ const Statistics = ( { good, neutral, bad, total, points } ) => {
       <p>neutraali {neutral}</p>
       <p>huono {bad}</p>
       <p>yhteensä {total}</p>
-      <p>keskiarvo {total === 0 ? 0 : points / total}</p>
-      <p>positiivisia {total === 0 ? 0 : good / total * 100} %</p>
+      <p>keskiarvo {points / total}</p>
+      <p>positiivisia {good / total * 100} %</p>
   </div>)
 }
 
@@ -43,8 +43,9 @@ const App = () => {
       <button onClick={clickGood} >Hyvä</button>
       <button onClick={clickNeutral} >Neutraali</button>
       <button onClick={clickBad} >Huono</button>
-      <Statistics good={good} neutral={neutral} bad={bad}
-        total={total} points={points} />
+      {total === 0 ? <p>Ei yhtään palautetta annettu.</p>
+      : <Statistics good={good} neutral={neutral} bad={bad}
+      total={total} points={points} /> }
     </div>
   )
 }
