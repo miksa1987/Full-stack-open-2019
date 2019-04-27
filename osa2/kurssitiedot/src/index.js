@@ -6,7 +6,7 @@ const Header = props =>
 
 const Total = props => {
   const total = props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises
-
+  
   return <p>yhteensä {total} tehtävää</p>
 }
   
@@ -19,6 +19,7 @@ const Content = props => (
     <Part part={props.parts[0]} />
     <Part part={props.parts[1]} />
     <Part part={props.parts[2]} />
+    <Total parts={props.parts} />
   </div>
 )
 
