@@ -8,6 +8,11 @@ const App = () => {
   const submitName = (event) => {
     event.preventDefault()
 
+    if( people.map(person => person.name).indexOf(event.target.name.value) > -1) {
+      window.alert(`${event.target.name.value} on jo luettelossa!`)
+      return
+    }
+
     const newName = { 
       id: people[people.length - 1].id + 1,
       name: event.target.name.value }
