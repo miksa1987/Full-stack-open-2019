@@ -5,8 +5,8 @@ const Header = props =>
   <h1>{props.name}</h1>
 
 const Total = props => {
-  const total = props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises
-  
+  const total = props.parts.reduce((total, { exercises }) => total + exercises, 0 )
+
   return <p>yhteensä {total} tehtävää</p>
 }
   
