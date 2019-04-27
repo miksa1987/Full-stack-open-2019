@@ -4,8 +4,8 @@ import ReactDOM from 'react-dom'
 const App = (props) => {
   const [selected, setSelected] = useState(0)
   const [points, setPoints] = useState([0,0,0,0,0,0,0,0,0,0,0])
-  const [selPoints, setSelPoints] = useState(0)
-
+  const [mostVoted, setMostVoted] = useState(0) // Laitetaan nyt oletuksena ensimmäinen äänestetyimmäksi. Yksinkertaisuuden vuoksi.
+ 
   const getRandom = () => {
     setSelected(Math.floor(Math.random() * anecdotes.length))
   }
@@ -14,15 +14,22 @@ const App = (props) => {
     const newPoints = [...points]
     newPoints[selected]++
     setPoints(newPoints)
-    console.log(`new points ${points[selected]}`)
+    
+    if(points[selected] >= points[mostVoted]) {
+      console.log('new best!')
+      setMostVoted(selected)
+    }
   }
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <p>{props.anecdotes[selected]}</p>
       <p>has {points[selected]} votes</p>
       <button onClick={getRandom}>next anecdote</button>
       <button onClick={handleVote}>vote</button>
+      <h1>Anecdote with most votes</h1>
+      <p>{props.anecdotes[mostVoted]}</p>
     </div>
   )
 }
