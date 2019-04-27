@@ -2,8 +2,12 @@ import React, { useState } from 'react'
 
 const App = () => {
   const [ people, setPeople] = useState([
-    { id: 0, name: 'Arto Hellas', number: '050-2121400' }
-  ]) 
+    { id:0, name: 'Arto Hellas', number: '040-123456' },
+    { id:1, name: 'Martti Tienari', number: '040-123456' },
+    { id:2, name: 'Arto Järvinen', number: '040-123456' },
+    { id:3, name: 'Lea Kutvonen', number: '040-123456' }
+  ])
+  const [filtered, setFiltered] = useState(people) 
 
   const submitName = (event) => {
     event.preventDefault()
@@ -22,8 +26,13 @@ const App = () => {
     setPeople(newPeople)
   }
 
+  const changeFiltered = (event) => {
+    setFiltered(people.filter(person => person.name.toLowerCase().includes(event.target.value)))
+  }
+
   return (
     <div>
+      rajaa näytettäviä <input name="search" onChange={changeFiltered} />
       <h2>Puhelinluettelo</h2>
       <form onSubmit={submitName}>
       <div>
@@ -37,7 +46,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numerot</h2>
-      {people.map(person => <p key={person.id}>{person.name} {person.number}</p>)}
+      {filtered.map(person => <p key={person.id}>{person.name} {person.number}</p>)}
     </div>
   )
 
