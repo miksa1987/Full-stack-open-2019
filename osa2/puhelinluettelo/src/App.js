@@ -7,7 +7,7 @@ const App = () => {
     { id:2, name: 'Arto Järvinen', number: '040-123456' },
     { id:3, name: 'Lea Kutvonen', number: '040-123456' }
   ])
-  const [filtered, setFiltered] = useState(people) 
+  const [filter, setFilter] = useState('')
 
   const submitName = (event) => {
     event.preventDefault()
@@ -20,19 +20,17 @@ const App = () => {
     const newName = { 
       id: people[people.length - 1].id + 1,
       name: event.target.name.value,
-      number: event.targer.number.value }
+      number: event.target.number.value }
     
     const newPeople = people.concat(newName)
     setPeople(newPeople)
   }
 
-  const changeFiltered = (event) => {
-    setFiltered(people.filter(person => person.name.toLowerCase().includes(event.target.value)))
-  }
+  const searchChange = (event) => setFilter(event.target.value)
 
   return (
     <div>
-      rajaa näytettäviä <input name="search" onChange={changeFiltered} />
+      rajaa näytettäviä <input name="search" onChange={searchChange} />
       <h2>Puhelinluettelo</h2>
       <form onSubmit={submitName}>
       <div>
@@ -46,7 +44,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numerot</h2>
-      {filtered.map(person => <p key={person.id}>{person.name} {person.number}</p>)}
+      {people.filter(person => person.name.toLowerCase().includes(filter)).map(person => <p key={person.id}>{person.name} {person.number}</p>)}
     </div>
   )
 
