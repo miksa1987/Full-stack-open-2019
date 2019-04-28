@@ -1,15 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import People from './components/People'
 import { Searchform, Addform } from './components/Forms'
 
 const App = () => {
-  const [ people, setPeople] = useState([
-    { id:0, name: 'Arto Hellas', number: '040-123456' },
-    { id:1, name: 'Martti Tienari', number: '040-123456' },
-    { id:2, name: 'Arto Järvinen', number: '040-123456' },
-    { id:3, name: 'Lea Kutvonen', number: '040-123456' }
-  ])
+  const [ people, setPeople] = useState([])
   const [filter, setFilter] = useState('')
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/people')
+      .then(response => setPeople(response.data))
+  }, [])
 
   return (
     <div>
@@ -17,7 +19,6 @@ const App = () => {
       <Searchform filter={setFilter} />
       <h2>Puhelinluettelo</h2>
       <Addform setPeople={setPeople} people={people} />
-      <h2>Numerot</h2>
       <People people={people} filter={filter} />
     </div>
   )
