@@ -1,5 +1,6 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { create, update } from '../service/CommService'
+import Message from './Message'
 
 const Searchform = (props) => {
   const searchChange = (event) => props.filter(event.target.value)
@@ -7,6 +8,9 @@ const Searchform = (props) => {
 }
 
 const Addform = (props) => {
+  const [message, setMessage] = useState('')
+  const [error, setError] = useState(false)
+
   const submitName = (event) => {
     event.preventDefault()
 
@@ -19,6 +23,14 @@ const Addform = (props) => {
         update(updatedName.id, updatedName)
           .then(response => {
             props.setPeople(props.people.map(person => person.id !== updatedName.id ? person : response.data))
+            setMessage(`${updatedName.name} numero päivitetty.`)
+            setTimeout(() => { setMessage('') }, 2000)  })
+          .catch(error => {
+            setMessage(`${updatedName.name} ei voitu päivittää.`)
+            setError(true)
+            setTimeout(() => {
+              setMessage('')
+              setError(false) }, 2000)
           })
       }
       return
@@ -29,13 +41,24 @@ const Addform = (props) => {
       number: event.target.number.value }
 
     create(newName)
-      .then(response => console.log(response.data))
+      .then(response => {
+        setMessage(`${newName.name} lisätty.`)
+        setTimeout(() => { setMessage('') }, 2000)})
+      .catch(error => {
+        setMessage(`${newName.name} ei voitu lisätä.`)
+        setError(true)
+        setTimeout(() => {
+          setMessage('')
+          setError(false) }, 2000)
+      })
 
     const newPeople = props.people.concat(newName)
     props.setPeople(newPeople)
   }
 
-  return (<div><form onSubmit={submitName}>
+  return (<div>
+    <Message error={error} message={message} />
+    <form onSubmit={submitName}>
     <div>
         nimi: <input name="name" />
       </div>
