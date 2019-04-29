@@ -1,4 +1,5 @@
 import React from 'react'
+import axios from 'axios'
 
 const Searchform = (props) => {
   const searchChange = (event) => props.filter(event.target.value)
@@ -8,17 +9,20 @@ const Searchform = (props) => {
 const Addform = (props) => {
   const submitName = (event) => {
     event.preventDefault()
-    
+
     if( props.people.map(person => person.name).indexOf(event.target.name.value) > -1) {
       window.alert(`${event.target.name.value} on jo luettelossa!`)
       return
     }
-    
-    const newName = { 
-      id: props.people[props.people.length - 1].id + 1,
+
+    const newName = {
       name: event.target.name.value,
       number: event.target.number.value }
-        
+
+    axios
+      .post('http://localhost:3001/people', newName)
+      .then(response => console.log(response.data))
+
     const newPeople = props.people.concat(newName)
     props.setPeople(newPeople)
   }
