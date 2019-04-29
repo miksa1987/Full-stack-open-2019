@@ -1,5 +1,5 @@
 import React from 'react'
-import { create } from '../service/CommService'
+import { create, update } from '../service/CommService'
 
 const Searchform = (props) => {
   const searchChange = (event) => props.filter(event.target.value)
@@ -11,7 +11,16 @@ const Addform = (props) => {
     event.preventDefault()
 
     if( props.people.map(person => person.name).indexOf(event.target.name.value) > -1) {
-      window.alert(`${event.target.name.value} on jo luettelossa!`)
+      if(window.confirm(`${event.target.name.value} on jo luettelossa, päivitetäänkö numbero?`)) {
+        const name = props.people.find(person => person.name === event.target.name.value)
+        const updatedName = { ...name, number: event.target.number.value }
+        console.log(updatedName)
+
+        update(updatedName.id, updatedName)
+          .then(response => {
+            props.setPeople(props.people.map(person => person.id !== updatedName.id ? person : response.data))
+          })
+      }
       return
     }
 

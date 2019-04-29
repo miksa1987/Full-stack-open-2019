@@ -12,6 +12,11 @@ const create = (content) => {
   return response
 }
 
+const update = (id, content) => {
+  const response = axios.put(`${dbURI}/${id}`, content)
+  return response
+}
+
 const DESTROY = (id) => axios.delete(`${dbURI}/${id}`)
 
-export { getAll, create, DESTROY }
+export { getAll, create, update, DESTROY }
