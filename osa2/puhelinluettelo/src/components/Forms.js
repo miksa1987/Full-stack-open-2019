@@ -1,5 +1,6 @@
 import React from 'react'
 import axios from 'axios'
+import { create, DESTROY } from '../service/CommService'
 
 const Searchform = (props) => {
   const searchChange = (event) => props.filter(event.target.value)
@@ -19,8 +20,7 @@ const Addform = (props) => {
       name: event.target.name.value,
       number: event.target.number.value }
 
-    axios
-      .post('http://localhost:3001/people', newName)
+    create(newName)
       .then(response => console.log(response.data))
 
     const newPeople = props.people.concat(newName)
