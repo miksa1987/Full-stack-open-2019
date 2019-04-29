@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import People from './components/People'
 import { Searchform, Addform } from './components/Forms'
 import { getAll } from './service/CommService'
@@ -18,7 +17,7 @@ const App = () => {
       <Searchform filter={setFilter} />
       <h2>Puhelinluettelo</h2>
       <Addform setPeople={setPeople} people={people} />
-      <People people={people} filter={filter} />
+      <People setpeople={setPeople} people={people} filter={filter} />
     </div>
   )
 
