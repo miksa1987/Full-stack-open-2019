@@ -42,6 +42,20 @@ test('Blog object id field is actually id', async () => {
   expect(blogs[0].id).toBeDefined()
 })
 
+test('Addition of blog object is succesful', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const blogToBeAddded = new Blog({
+    title: 'Tämä on kolmas blogi',
+    author: 'Simba',
+    url: 'http://www.iltalehti.fi',
+    likes: 99
+  })
+  await blogToBeAddded.save()
+  const blogsAtEnd = await helper.blogsInDb()
+
+  expect(blogsAtEnd.length).toBe((blogsAtStart.length) + 1)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
