@@ -44,16 +44,37 @@ test('Blog object id field is actually id', async () => {
 
 test('Addition of blog object is succesful', async () => {
   const blogsAtStart = await helper.blogsInDb()
-  const blogToBeAddded = new Blog({
+  const blogToBeAddded = {
     title: 'Tämä on kolmas blogi',
     author: 'Simba',
     url: 'http://www.iltalehti.fi',
     likes: 99
-  })
-  await blogToBeAddded.save()
-  const blogsAtEnd = await helper.blogsInDb()
+  }
+  await api
+    .post('/api/blogs')
+    .send(blogToBeAddded)
+    .expect(201)
+
+  const response = await api.get('/api/blogs')
+  const blogsAtEnd = response.body
 
   expect(blogsAtEnd.length).toBe((blogsAtStart.length) + 1)
+})
+
+test('If blog has no likes-field it will be set to 0', async () => {
+  const blogWithNoLikes = new Blog({
+    title: 'Tässä ei ole likes-kenttää',
+    author: 'Stig',
+    url: 'http://wikipedia.org'
+  })
+  await api
+    .post('/api/blogs')
+    .send(blogWithNoLikes)
+    .expect(201)
+  
+  const response = await api.get('/api/blogs')
+  
+  expect(response.body[2].likes).toBe(0)
 })
 
 afterAll(() => {
