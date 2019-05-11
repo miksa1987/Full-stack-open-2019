@@ -77,6 +77,30 @@ test('If blog has no likes-field it will be set to 0', async () => {
   expect(response.body[2].likes).toBe(0)
 })
 
+test('Blog with no title doesnt get added', async () => {
+  const blogWithNoTitle = {
+    author: 'Jekkumies',
+    url: 'http://www.google.com',
+    likes: 10
+  }
+  await api
+    .post('/api/blogs')
+    .send(blogWithNoTitle)
+    .expect(400)
+})
+
+test('Blog with no url doesnt get added', async () => {
+  const blogWithNoURL = {
+    title: 'Jekkublogi',
+    author: 'Jekkumies',
+    likes: 10
+  }
+  await api
+    .post('/api/blogs')
+    .send(blogWithNoURL)
+    .expect(400)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
