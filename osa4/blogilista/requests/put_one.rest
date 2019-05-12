@@ -1,0 +1,9 @@
+PUT http://localhost:3001/api/blogs/5cd84b4418f6bf0f723ef730
+Content-type: application/json
+
+{
+  "title": "test",
+  "author": "Mika Laaksonen",
+  "url": "http://www.chaosandpain.com",
+  "likes": "5"
+}
