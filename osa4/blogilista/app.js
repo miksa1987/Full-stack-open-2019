@@ -7,6 +7,7 @@ const config = require('./util/config')
 
 const blogRouter = require('./controllers/blogRouter')
 const userRouter = require('./controllers/userRouter')
+const loginRouter = require('./controllers/loginRouter')
 
 mongoose.connect(config.mongoUrl, { useNewUrlParser: true })
 
@@ -15,5 +16,6 @@ app.use(bodyParser.json())
 
 app.use('/api/blogs', blogRouter)
 app.use('/api/users', userRouter)
+app.use('/api/login', loginRouter)
 
 module.exports = app
