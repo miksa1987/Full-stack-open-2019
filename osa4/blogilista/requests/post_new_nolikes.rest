@@ -4,5 +4,6 @@ Content-type: application/json
 {
   "title": "test",
   "author": "Mika Laaksonen",
-  "url": "http://www.chaosandpain.com"
+  "url": "http://www.chaosandpain.com",
+  "userid": "5cd86428ddbcb91c3176f93d"
 }
