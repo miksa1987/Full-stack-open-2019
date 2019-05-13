@@ -1,0 +1,10 @@
+POST http://localhost:3001/api/blogs
+Content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1pa2EgTGFha3NvbmVuIiwiaWQiOiI1Y2Q5MjdmNTAyYjBiNzFmZDNlNmE4NzYiLCJpYXQiOjE1NTc3Njk4OTd9.t74WTvT_rQvZxe1OYHjwZ6y_TStg3PUcAVkrEkEmnos
+
+{
+  "title": "test1",
+  "author": "Mika Laaksonen",
+  "url": "http://www.chaosandpain.com",
+  "likes": "5"
+}

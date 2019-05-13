@@ -20,6 +20,7 @@ userRouter.post('/', async (request, response) => {
       const savedUser = await newUser.save()
       response.json(savedUser)
   } catch(exception) {
+    console.log(exception)
     response.status(400).send( {error: 'bad username or password'})
   }
 })
