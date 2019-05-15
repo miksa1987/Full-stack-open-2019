@@ -21,18 +21,37 @@ const App = () => {
     if(user !== null && user.name && user.username && user.token) {
       console.log('LOGGED!')
       window.localStorage.setItem('user', JSON.stringify(user))
+      blogService.setToken(user.token)
     }
   }, [user])
 
   const logout = () => {
     setUser(null)
+    blogService.setToken('')
     window.localStorage.clear()
   }
+
+  const sendNewBlog = (event) => {
+    event.preventDefault()
+    const newBlog = {
+      title: event.target.title.value,
+      author: event.target.author.value,
+      url: event.target.url.value
+    }
+    blogService.createNew(newBlog)
+  }
+
   if(user) {
     return (
       <div>
         <h2>blogs</h2>
         <p>{user.name} logged in</p>
+        <form onSubmit={sendNewBlog}>
+          <input name='title' /><br/>
+          <input name='author' /><br/>
+          <input name='url' /><br/>
+          <button type='submit'>Submit</button>
+        </form>
         <button onClick={logout}>Log out</button>
         {blogs.map(blog =>
           <Blog key={blog.id} blog={blog} />
