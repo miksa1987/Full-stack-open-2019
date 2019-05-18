@@ -22,8 +22,8 @@ const App = () => {
   }
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    ) 
+      setBlogs( blogs ))
+    
     if(window.localStorage.getItem('user') !== null) {
       setUser(JSON.parse(window.localStorage.getItem('user')))
     }

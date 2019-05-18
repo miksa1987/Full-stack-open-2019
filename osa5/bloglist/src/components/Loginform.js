@@ -6,7 +6,7 @@ const Loginform = ( props ) => {
     event.preventDefault()
     const username = event.target.username.value
     const password = event.target.password.value
-    console.log(`${username} ${password}`)
+    
     try {
       const response = await axios.post('/api/login', {username, password})
     
