@@ -16,6 +16,11 @@ const Newblogform = (props) => {
       props.setBlogs(newBlogs)
       props.setMessage(`blog ${newBlog.title} created`)
       props.nullMessage()
+      try { 
+        props.BlogFormRef.current.toggleVisible()
+      } catch (error) {
+        console.log(error)
+      }
     } catch(error) {
       props.setMessage('Failed to create blog')
       props.setErrorOn()

@@ -12,7 +12,8 @@ const Loginform = ( props ) => {
     
       props.setUser({ name: response.data.name,
                       username: response.data.username,
-                      token: response.data.token})
+                      token: response.data.token,
+                      id: response.data.id})
     } catch(error) {
       props.setMessage('Username or password incorrect')
       props.setErrorOn(true)

@@ -14,6 +14,8 @@ const App = () => {
   const [message, setMessage] = useState('')
   const [errorOn, setErrorOn] = useState(false)
 
+  const blogFormRef = React.createRef()
+
   const nullMessage = () => {
     setTimeout(() => {
       setMessage('')
@@ -59,8 +61,9 @@ const App = () => {
         <Message message={message} errorOn={errorOn} />
         <h2>blogs</h2>
         <p>{user.name} logged in</p>
-        <Togglabble buttonText='Add new blog'>
-          <Newblogform blogs={blogs} setBlogs={setBlogs} setMessage={setMessage} setErrorOn={setErrorOn} nullMessage={nullMessage} />
+        <Togglabble buttonText='Add new blog' ref={blogFormRef}>
+          <Newblogform blogs={blogs} setBlogs={setBlogs} setMessage={setMessage} setErrorOn={setErrorOn} 
+            nullMessage={nullMessage} BlogFormRef={blogFormRef} />
         </Togglabble>
         <button onClick={logout}>Log out</button><br/><br/>
         {blogs.map(blog =>
