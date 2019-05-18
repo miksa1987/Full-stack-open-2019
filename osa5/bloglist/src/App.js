@@ -21,8 +21,10 @@ const App = () => {
     }, 5000)
   }
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs ))
+    blogService.getAll().then(blogs => {
+      blogs.sort(compareBlogs)
+      setBlogs( blogs )
+    })
     
     if(window.localStorage.getItem('user') !== null) {
       setUser(JSON.parse(window.localStorage.getItem('user')))
@@ -38,6 +40,12 @@ const App = () => {
       nullMessage()
     }
   }, [user])
+
+  const compareBlogs = (blog1, blog2) => {
+    if(blog1.likes !== blog2.likes) return blog2.likes - blog1.likes
+
+    return blog1.title > blog2.title
+  }
 
   const logout = () => {
     setUser(null)
