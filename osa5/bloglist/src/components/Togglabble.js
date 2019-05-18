@@ -12,7 +12,7 @@ const Togglabble = React.forwardRef((props, ref) => {
   }
 
   useImperativeHandle(ref, () => {
-    return toggleVisible
+    return { toggleVisible }
   })
 
   return ( <div>
