@@ -5,6 +5,7 @@ import blogService from './services/blogs'
 import Loginform from './components/Loginform'
 import Newblogform from './components/Newblogform'
 import Message from './components/Message'
+import Togglabble from './components/Togglabble'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -50,7 +51,9 @@ const App = () => {
         <Message message={message} errorOn={errorOn} />
         <h2>blogs</h2>
         <p>{user.name} logged in</p>
-        <Newblogform blogs={blogs} setBlogs={setBlogs} setMessage={setMessage} setErrorOn={setErrorOn} nullMessage={nullMessage} />
+        <Togglabble buttonText='Add new blog'>
+          <Newblogform blogs={blogs} setBlogs={setBlogs} setMessage={setMessage} setErrorOn={setErrorOn} nullMessage={nullMessage} />
+        </Togglabble>
         <button onClick={logout}>Log out</button><br/><br/>
         {blogs.map(blog =>
           <Blog key={blog.id} blog={blog} />
