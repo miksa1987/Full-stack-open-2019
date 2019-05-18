@@ -4,11 +4,21 @@ import blogService from './services/blogs'
 
 import Loginform from './components/Loginform'
 import Newblogform from './components/Newblogform'
+import Message from './components/Message'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
 
+  const [message, setMessage] = useState('')
+  const [errorOn, setErrorOn] = useState(false)
+
+  const nullMessage = () => {
+    setTimeout(() => {
+      setMessage('')
+      setErrorOn(false)
+    }, 5000)
+  }
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
@@ -23,6 +33,8 @@ const App = () => {
       console.log('LOGGED!')
       window.localStorage.setItem('user', JSON.stringify(user))
       blogService.setToken(user.token)
+      setMessage(`${user.name} logged on`)
+      nullMessage()
     }
   }, [user])
 
@@ -32,22 +44,13 @@ const App = () => {
     window.localStorage.clear()
   }
 
-  const sendNewBlog = (event) => {
-    event.preventDefault()
-    const newBlog = {
-      title: event.target.title.value,
-      author: event.target.author.value,
-      url: event.target.url.value
-    }
-    blogService.createNew(newBlog)
-  }
-
   if(user) {
     return (
       <div>
+        <Message message={message} errorOn={errorOn} />
         <h2>blogs</h2>
         <p>{user.name} logged in</p>
-        <Newblogform blogs={blogs} setblogs={setBlogs} />
+        <Newblogform blogs={blogs} setBlogs={setBlogs} setMessage={setMessage} setErrorOn={setErrorOn} nullMessage={nullMessage} />
         <button onClick={logout}>Log out</button><br/><br/>
         {blogs.map(blog =>
           <Blog key={blog.id} blog={blog} />
@@ -58,8 +61,10 @@ const App = () => {
 
   return (
     <div>
+      <Message message={message} errorOn={errorOn} 
+        setMessage={setMessage} setErrorOn={setErrorOn} nullMessage={nullMessage} />
       <h2>Log in to applicationn</h2>
-      <Loginform setuser={setUser} />
+      <Loginform setUser={setUser} setMessage={setMessage} setErrorOn={setErrorOn} nullMessage={nullMessage} />
     </div>
   )
 }

@@ -2,27 +2,32 @@ import React from 'react'
 import blogService from '../services/blogs'
 
 const Newblogform = (props) => {
-  const blogs = props.blogs
-  const setBlogs = props.setblogs
-
   const sendNewBlog = (event) => {
     event.preventDefault()
-    const newBlog = {
-      title: event.target.title.value,
-      author: event.target.author.value,
-      url: event.target.url.value,
-      id: Math.floor(Math.random() * 100000)
-    }
-    blogService.createNew(newBlog)
-    const newBlogs = blogs.concat(newBlog)
-    setBlogs(newBlogs)
+    try {
+      const newBlog = {
+        title: event.target.title.value,
+        author: event.target.author.value,
+        url: event.target.url.value,
+        id: Math.floor(Math.random() * 100000)
+      }
+      blogService.createNew(newBlog)
+      const newBlogs = props.blogs.concat(newBlog)
+      props.setBlogs(newBlogs)
+      props.setMessage(`blog ${newBlog.title} created`)
+      props.nullMessage()
+    } catch(error) {
+      props.setMessage('Failed to create blog')
+      props.setErrorOn()
+      props.nullMessage()
+    } 
   }
 
-  return ( <div><form onSubmit={sendNewBlog}>
-    <input name='title' /><br/>
-    <input name='author' /><br/>
-    <input name='url' /><br/>
-    <button type='submit'>Submit</button>
+  return ( <div><h4>Submit new blog</h4><form onSubmit={sendNewBlog}>
+    Title <input name='title' /><br/>
+    Author<input name='author' /><br/>
+    URL <input name='url' /><br/>
+    <button type='submit'>Add</button>
   </form></div> )
 }
 
