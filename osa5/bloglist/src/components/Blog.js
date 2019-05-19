@@ -6,7 +6,7 @@ const blogStyle = {
   border: 'solid 1px black'
 }
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, user, removeBlog }) => {
   const [expanded, setExpanded] = useState(false)
 
   const toggleExpand = () => {
@@ -19,10 +19,16 @@ const Blog = ({ blog }) => {
     const blogToUpdate = blog
 
     try {
-      blogService.update(blog.id, blogToUpdate)
+      await blogService.update(blog.id, blogToUpdate)
     } catch(error) {
       console.log('shieeet')
     }
+  }
+
+  const remove = async () => {
+    console.log('removing')
+    removeBlog(blog)
+    await blogService.remove(blog.id)
   }
 
   if(!expanded) {
@@ -35,6 +41,7 @@ const Blog = ({ blog }) => {
     {blog.title} {blog.author}<br/>
     <a href={blog.url}>{blog.url}</a><br/>
     {blog.likes} likes<button onClick={like}>like</button>
+    {blog.user === user ? <button onClick={remove}>Remove blog</button> : null}
   </div> )
 }
 

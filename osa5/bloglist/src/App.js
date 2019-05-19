@@ -55,6 +55,11 @@ const App = () => {
     window.localStorage.clear()
   }
 
+  const removeBlog = (blogToRemove) => {
+    const updatedBlogs = blogs.filter(blog => blog.id !== blogToRemove.id)
+    setBlogs(updatedBlogs)
+  }
+
   if(user) {
     return (
       <div>
@@ -67,7 +72,7 @@ const App = () => {
         </Togglabble>
         <button onClick={logout}>Log out</button><br/><br/>
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} user={user.id} removeBlog={removeBlog} />
         )}
       </div>
     )
