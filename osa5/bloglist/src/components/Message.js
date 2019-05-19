@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const errorStyle = {
   border: 'solid 3px #ff0000',
@@ -10,19 +11,24 @@ const notificationStyle = {
   background: '#ccffcc'
 }
 
-const Message = (props) => {
-  if(props.message === '') {
+const Message = ( { message, errorOn } ) => {
+  if(message === '') {
     return null
   }
-  if(props.errorOn) {
+  if(errorOn) {
     return ( <div style={errorStyle}>
-      <p>{props.message}</p>
+      <p>{message}</p>
     </div>)
   } else {
     return ( <div style={notificationStyle}>
-      <p>{props.message}</p>
+      <p>{message}</p>
     </div>)
   }
+}
+
+Message.propTypes = {
+  message: PropTypes.string.isRequired,
+  errorOn: PropTypes.bool.isRequired
 }
 
 export default Message

@@ -1,7 +1,8 @@
 import React from 'react'
 import blogService from '../services/blogs'
+import PropTypes from 'prop-types'
 
-const Newblogform = (props) => {
+const Newblogform = ( { blogs, setBlogs, BlogFormRef, setMessage, setErrorOn, nullMessage } ) => {
   const sendNewBlog = (event) => {
     event.preventDefault()
     try {
@@ -12,19 +13,19 @@ const Newblogform = (props) => {
         id: Math.floor(Math.random() * 100000)
       }
       blogService.createNew(newBlog)
-      const newBlogs = props.blogs.concat(newBlog)
-      props.setBlogs(newBlogs)
-      props.setMessage(`blog ${newBlog.title} created`)
-      props.nullMessage()
+      const newBlogs = blogs.concat(newBlog)
+      setBlogs(newBlogs)
+      setMessage(`blog ${newBlog.title} created`)
+      nullMessage()
       try { 
-        props.BlogFormRef.current.toggleVisible()
+        BlogFormRef.current.toggleVisible()
       } catch (error) {
         console.log(error)
       }
     } catch(error) {
-      props.setMessage('Failed to create blog')
-      props.setErrorOn()
-      props.nullMessage()
+      setMessage('Failed to create blog')
+      setErrorOn()
+      nullMessage()
     } 
   }
 
@@ -34,6 +35,15 @@ const Newblogform = (props) => {
     URL <input name='url' /><br/>
     <button type='submit'>Add</button>
   </form></div> )
+}
+
+Newblogform.propTypes = {
+  blogs: PropTypes.array.isRequired,
+  setBlogs: PropTypes.func.isRequired,
+  BlogFormRef: PropTypes.object.isRequired,
+  setMessage: PropTypes.func.isRequired,
+  setErrorOn: PropTypes.func.isRequired,
+  nullMessage: PropTypes.func.isRequired
 }
 
 export default Newblogform
