@@ -26,9 +26,10 @@ const Blog = ({ blog, user, removeBlog }) => {
   }
 
   const remove = async () => {
-    console.log('removing')
-    removeBlog(blog)
-    await blogService.remove(blog.id)
+    if(window.confirm(`Poistetaanko ${blog.title}?`)) {
+      removeBlog(blog)
+      await blogService.remove(blog.id)
+    }
   }
 
   if(!expanded) {
