@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "jest-dom": "^3.2.2",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -32,6 +33,7 @@
   },
   "proxy": "http://localhost:3001",
   "devDependencies": {
-    "eslint-plugin-jest": "^22.5.1"
+    "eslint-plugin-jest": "^22.5.1",
+    "react-testing-library": "^7.0.1"
   }
 }
