@@ -38,7 +38,7 @@ const Blog = ({ blog, user, removeBlog }) => {
     </div> )
   }
 
-  return ( <div style={blogStyle} onClick={toggleExpand}>
+  return ( <div className='Blog' style={blogStyle} onClick={toggleExpand}>
     {blog.title} {blog.author}<br/>
     <a href={blog.url}>{blog.url}</a><br/>
     {blog.likes} likes<button onClick={like}>like</button>
