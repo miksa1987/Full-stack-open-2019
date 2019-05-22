@@ -2,14 +2,20 @@ import React from 'react'
 import blogService from '../services/blogs'
 import PropTypes from 'prop-types'
 
+import useField from '../hooks/useField'
+
 const Newblogform = ( { blogs, setBlogs, BlogFormRef, setMessage, setErrorOn, nullMessage } ) => {
+  const title = useField('text')
+  const author = useField('text')
+  const url = useField('text')
+
   const sendNewBlog = (event) => {
     event.preventDefault()
     try {
       const newBlog = {
-        title: event.target.title.value,
-        author: event.target.author.value,
-        url: event.target.url.value,
+        title: title.value,
+        author: author.value,
+        url: url.value,
         id: Math.floor(Math.random() * 100000)
       }
       blogService.createNew(newBlog)
@@ -30,9 +36,9 @@ const Newblogform = ( { blogs, setBlogs, BlogFormRef, setMessage, setErrorOn, nu
   }
 
   return ( <div><h4>Submit new blog</h4><form onSubmit={sendNewBlog}>
-    Title <input name='title' /><br/>
-    Author<input name='author' /><br/>
-    URL <input name='url' /><br/>
+    Title <input {...title} /><br/>
+    Author<input {...author} /><br/>
+    URL <input {...url} /><br/>
     <button type='submit'>Add</button>
   </form></div> )
 }
