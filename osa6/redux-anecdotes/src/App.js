@@ -12,6 +12,10 @@ const App = (props) => {
     props.store.dispatch({ type: 'ADD', data: { anecdote: event.target.anecdote.value }})
     event.target.anecdote.value = ''
   }
+
+  const compare = (anecdote1, anecdote2) => {
+    return anecdote2.votes - anecdote1.votes
+  }
   
   return (
     <div>
@@ -26,7 +30,7 @@ const App = (props) => {
             <button onClick={() => vote(anecdote.id)}>vote</button>
           </div>
         </div>
-      )}
+      ).sort(compare)}
       <h2>create new</h2>
       <form onSubmit={add}>
         <div><input name='anecdote' /></div>
