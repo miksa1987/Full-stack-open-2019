@@ -23,7 +23,7 @@ const compare = (anecdote1, anecdote2) => {
 
 const initialState = anecdotesAtStart.map(asObject)
 
-const reducer = (state = initialState, action) => {
+const anecdoteReducer = (state = initialState, action) => {
   switch(action.type) {
     case 'VOTE':
       const votedAnecdote = state.find(anecdote => anecdote.id === action.data.id)
@@ -50,5 +50,5 @@ const addAnecdote = (anecdote) => {
   return { type: 'ADD', data: { anecdote: anecdote }}
 }
 
-export default reducer
+export default anecdoteReducer
 export { voteAnecdote, addAnecdote }
