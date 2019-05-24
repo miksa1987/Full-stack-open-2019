@@ -1,27 +1,26 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { voteAnecdote } from '../reducers/anecdoteReducer'
 import { newMessage, emptyMessage } from '../reducers/notificationReducer'
 
 const AnecdoteList = (props) => {
-  const anecdotes = props.store.getState().anecdotes
-  const filter = props.store.getState().filter
-
   const vote = (id, anecdote) => {
     console.log(props.store.getState())
-    props.store.dispatch(voteAnecdote(id))
-    props.store.dispatch(newMessage(`You voted '${anecdote}'`))
+    props.voteAnecdote(id)
+    props.newMessage(`You voted '${anecdote}'`)
     setTimeout(() => {
-      props.store.dispatch(emptyMessage())
+      props.emptyMessage()
     }, 5000)
   }
 
   return ( <div>
     <h2>Anecdotes</h2>
-    {anecdotes.filter(anecdote => anecdote.content.toLowerCase().includes(filter)).map(anecdote =>
-      <div key={anecdote.id}>
-        <div>
-          {anecdote.content}
-        </div>
+    {props.anecdotes.filter(anecdote => 
+      anecdote.content.toLowerCase().includes(props.filter.toLowerCase())).map(anecdote =>
+        <div key={anecdote.id}>
+          <div>
+            {anecdote.content}
+          </div>
         <div>
           has {anecdote.votes}
           <button onClick={() => vote(anecdote.id, anecdote.content)}>vote</button>
@@ -31,4 +30,13 @@ const AnecdoteList = (props) => {
   </div> )
 }
 
-export default AnecdoteList
+const mapDispatchToProps = {
+  voteAnecdote, newMessage, emptyMessage
+}
+const mapStateToProps = (state) => {
+  return {
+    anecdotes: state.anecdotes,
+    filter: state.filter
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(AnecdoteList)

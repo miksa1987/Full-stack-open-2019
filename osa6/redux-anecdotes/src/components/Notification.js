@@ -6,6 +6,12 @@ const Notification = (props) => {
     padding: 10,
     borderWidth: 1
   }
+  const styleNone = {
+    display: 'none'
+  }
+  if(props.store.getState().notification === '') {
+    return ( <div style={styleNone} /> )
+  }
   return (
     <div style={style}>
       {props.store.getState().notification}
