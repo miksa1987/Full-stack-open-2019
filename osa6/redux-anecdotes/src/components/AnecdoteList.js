@@ -14,8 +14,7 @@ const AnecdoteList = (props) => {
 
   return ( <div>
     <h2>Anecdotes</h2>
-    {props.anecdotes.filter(anecdote => 
-      anecdote.content.toLowerCase().includes(props.filter.toLowerCase())).map(anecdote =>
+    {props.anecdotes.map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
@@ -29,13 +28,17 @@ const AnecdoteList = (props) => {
   </div> )
 }
 
+const visibleAnecdotes = ({anecdotes, filter}) => {
+  return anecdotes.filter(anecdote => anecdote.content.toLowerCase().includes(filter.toLowerCase()))
+}
+
 const mapDispatchToProps = {
   voteAnecdote, newMessage, emptyMessage
 }
+
 const mapStateToProps = (state) => {
   return {
-    anecdotes: state.anecdotes,
-    filter: state.filter
+    anecdotes: visibleAnecdotes(state)
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(AnecdoteList)
