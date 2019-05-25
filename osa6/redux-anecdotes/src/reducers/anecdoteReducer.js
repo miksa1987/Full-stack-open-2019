@@ -1,3 +1,5 @@
+import anecdoteService from '../service/anecdotes'
+
 const compare = (anecdote1, anecdote2) => {
   return anecdote2.votes - anecdote1.votes
 }
@@ -25,8 +27,14 @@ const anecdoteReducer = (state = [], action) => {
   }
 }
 
-const initialize = (anecdotes) => {
-  return { type: 'INITIALIZE', data: { anecdotes }}
+const initialize = () => {
+  return async dispatch => {
+    const anecdotes = await anecdoteService.getAll()
+    dispatch({
+      type: 'INITIALIZE',
+      data: { anecdotes }
+    })
+  }
 }
 
 const voteAnecdote = (id) => {
