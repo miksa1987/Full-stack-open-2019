@@ -19,9 +19,9 @@ const anecdoteReducer = (state = [], action) => {
     case 'ADD':
       //const newAnecdote = asObject(action.data.anecdote)
       console.log(action.data.anecdote)
-      return [ ...state, action.data.anecdote ]
+      return [ ...state, action.data ]
     case 'INITIALIZE':
-      return action.data.anecdotes
+      return action.data
     default:
       return state
   }
@@ -32,7 +32,7 @@ const initialize = () => {
     const anecdotes = await anecdoteService.getAll()
     dispatch({
       type: 'INITIALIZE',
-      data: { anecdotes }
+      data: anecdotes 
     })
   }
 }
@@ -42,7 +42,13 @@ const voteAnecdote = (id) => {
 }
 
 const addAnecdote = (anecdote) => {
-  return { type: 'ADD', data: { anecdote: anecdote }}
+  return async dispatch => {
+    const newAnecdote = await anecdoteService.createNew(anecdote)
+    dispatch({
+      type: 'ADD',
+      data: newAnecdote
+    })
+  }
 }
 
 export default anecdoteReducer

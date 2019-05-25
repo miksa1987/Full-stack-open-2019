@@ -7,8 +7,7 @@ import { newMessage, emptyMessage } from '../reducers/notificationReducer'
 const AnecdoteForm = (props) => {
   const add = async (event) => {
     event.preventDefault()
-
-    const newAnecdote = await anecdoteService.createNew(event.target.anecdote.value)
+    const newAnecdote = event.target.anecdote.value
     props.addAnecdote(newAnecdote)
 
     props.newMessage(`You added '${newAnecdote.content}'`)
