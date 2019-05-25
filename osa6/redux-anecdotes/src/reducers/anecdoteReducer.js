@@ -1,13 +1,3 @@
-const getId = () => (100000 * Math.random()).toFixed(0)
-
-const asObject = (anecdote) => {
-  return {
-    content: anecdote,
-    id: getId(),
-    votes: 0
-  }
-}
-
 const compare = (anecdote1, anecdote2) => {
   return anecdote2.votes - anecdote1.votes
 }
@@ -25,8 +15,9 @@ const anecdoteReducer = (state = [], action) => {
 
       return newAnecdotes
     case 'ADD':
-      const newAnecdote = asObject(action.data.anecdote)
-      return [ ...state, newAnecdote ]
+      //const newAnecdote = asObject(action.data.anecdote)
+      console.log(action.data.anecdote)
+      return [ ...state, action.data.anecdote ]
     case 'INITIALIZE':
       return action.data.anecdotes
     default:

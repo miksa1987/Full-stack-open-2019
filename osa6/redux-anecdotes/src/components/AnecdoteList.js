@@ -29,6 +29,7 @@ const AnecdoteList = (props) => {
 }
 
 const visibleAnecdotes = ({anecdotes, filter}) => {
+  console.log(anecdotes)
   return anecdotes.filter(anecdote => anecdote.content.toLowerCase().includes(filter.toLowerCase()))
 }
 
