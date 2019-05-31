@@ -45,6 +45,10 @@ const About = () => (
   </div>
 )
 
+const Notification = ({notification}) => {
+  return (<div><strong>{notification}</strong></div>)
+}
+
 const Footer = () => (
   <div>
     Anecdote app for <a href='https://courses.helsinki.fi/fi/tkt21009'>Full Stack -sovelluskehitys</a>.
@@ -60,6 +64,8 @@ const Create = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+
+    props.setNotification(`A new anecdote "${content}" created!`)
     props.addNew({
       content,
       author,
@@ -67,6 +73,7 @@ const Create = (props) => {
       votes: 0
     })
     props.history.push('/')
+    setTimeout(() => props.setNotification(''), 10000)
   }
 
   return (
@@ -134,11 +141,11 @@ const App = () => {
   return (
     <div>
       <h1>Software anecdotes</h1>
-      
+      <Notification notification={notification} />
       <Router>
         <Menu />
         <Route exact path='/' render={ () => <AnecdoteList anecdotes={anecdotes} /> } />
-        <Route path='/create' render={ () => <CreateNew addNew={addNew} /> } />
+        <Route path='/create' render={ () => <CreateNew addNew={addNew} setNotification={setNotification} /> } />
         <Route path='/about' render={ () => <About /> } />
         <Route exact path='/anecdotes/:id' render={({ match }) => <Anecdote anecdote={anecdoteById(match.params.id)} /> } />
       </Router>
