@@ -53,11 +53,10 @@ const Footer = () => (
   </div>
 )
 
-const CreateNew = (props) => {
+const Create = (props) => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
-
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -67,6 +66,7 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    props.history.push('/')
   }
 
   return (
@@ -89,8 +89,8 @@ const CreateNew = (props) => {
       </form>
     </div>
   )
-
 }
+const CreateNew = withRouter(Create)
 
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
