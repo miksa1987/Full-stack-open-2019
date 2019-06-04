@@ -1,0 +1,43 @@
+import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+
+const errorStyle = {
+  border: 'solid 3px #ff0000',
+  background: '#ffcccc'
+}
+
+const notificationStyle = {
+  border: 'solid 3px #00ff00',
+  background: '#ccffcc'
+}
+
+const hidden = {
+  display: 'none'
+}
+
+const Message = ( props ) => {
+  if(props.message === '') {
+    return ( <div style={hidden}></div> )
+  }
+  if(props.error) {
+    return ( <div style={errorStyle}>
+      <p>{props.message}</p>
+    </div>)
+  } else {
+    return ( <div style={notificationStyle}>
+      <p>{props.message}</p>
+    </div>)
+  }
+}
+
+Message.propTypes = {
+  message: PropTypes.string.isRequired,
+  errorOn: PropTypes.bool.isRequired
+}
+
+const mapStateToProps = (state) => {
+  return { message: state.message.message, error: state.message.error }
+}
+
+export default connect(mapStateToProps, null)(Message)
