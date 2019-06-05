@@ -5,6 +5,7 @@ import blogService from './services/blogs'
 
 import { setNotification } from './reducers/notifReducer'
 import { createBlog, initBlogs } from './reducers/blogReducer'
+import { setUser } from './reducers/userReducer'
 
 import Loginform from './components/Loginform'
 import Newblogform from './components/Newblogform'
@@ -19,22 +20,27 @@ const App = (props) => {
 
   useEffect(() => {
     if(window.localStorage.getItem('user') !== null) {
+      const user = JSON.parse(window.localStorage.getItem('user'))
       setUser(JSON.parse(window.localStorage.getItem('user')))
+      props.setUser(user)
     }
     console.log(props.blogs)
     //blogService.getAll().then(r => console.log(r))
-  }, [props.blogs])
+  }, [props])
 
   useEffect(() => {
-    if(user !== null && user.name && user.username && user.token) {
-      console.log('LOGGED!')
-      window.localStorage.setItem('user', JSON.stringify(user))
-      blogService.setToken(user.token)
-      props.setNotification(`${user.name} logged on`, 5)
+    if(props.user !== null && props.user.name && props.user.username && props.user.token) {
+      window.localStorage.setItem('user', JSON.stringify(props.user))
+      console.log(window.localStorage.getItem('user'))
+      blogService.setToken(props.user.token)
+      props.setNotification(`${props.user.name} logged on`, 5)
     }
-  })
+  }, [props])
 
-  
+  const debug = () => {
+    console.log(props.blogs)
+    console.log(props.user)
+  }
 
   const logout = () => {
     setUser(null)
@@ -47,12 +53,13 @@ const App = (props) => {
     setBlogs(updatedBlogs)
   }
 
-  if(user) {
+  if(props.user) {
     return (
       <div>
         <Message />
+        <button onClick={debug}>DEBUG</button>
         <h2>blogs</h2>
-        <p>{user.name} logged in</p>
+        <p>{props.user.name} logged in</p>
         <Togglabble buttonText='Add new blog' ref={blogFormRef}>
           <Newblogform BlogFormRef={blogFormRef} />
         </Togglabble>
@@ -76,11 +83,12 @@ const App = (props) => {
 const mapStateToProps = (state) => {
   return { 
     message: state.message,
-    blogs: state.blogs
+    blogs: state.blogs,
+    user: state.user
   }
 }
 
 const mapDispatchToProps = () => {
-  return { initBlogs, setNotification, createBlog }
+  return { initBlogs, setNotification, createBlog, setUser }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(App)

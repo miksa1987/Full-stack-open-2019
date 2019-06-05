@@ -1,15 +1,16 @@
 import React from 'react'
 import axios from 'axios'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { setNotification } from '../reducers/notifReducer'
+import { login } from '../reducers/userReducer'
 
 const Loginform = ( props ) => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     const username = event.target.username.value
     const password = event.target.password.value
-    
+    console.log('login function')
+    props.login(username, password)
     try {
       const response = await axios.post('/api/login', {username, password})
       
@@ -34,4 +35,8 @@ const Loginform = ( props ) => {
   </div>)
 }
 
-export default connect(null, { setNotification })(Loginform)
+const mapStateToProps = (state) => {
+  return { user: state.user }
+}
+
+export default connect(mapStateToProps, { setNotification, login })(Loginform)

@@ -7,13 +7,15 @@ import thunk from 'redux-thunk'
 import blogService from './services/blogs'
 import notifReducer from './reducers/notifReducer'
 import blogReducer from './reducers/blogReducer'
-import { initBlogs, init } from './reducers/blogReducer'
+import userReducer from './reducers/userReducer'
+import { init } from './reducers/blogReducer'
 
 import App from './App'
 
 const reducer = combineReducers({
   message: notifReducer,
-  blogs: blogReducer
+  blogs: blogReducer,
+  user: userReducer
 })
 const store = createStore(reducer, applyMiddleware(thunk))
 

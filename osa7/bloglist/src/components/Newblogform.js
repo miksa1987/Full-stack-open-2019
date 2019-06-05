@@ -1,6 +1,4 @@
 import React from 'react'
-import blogService from '../services/blogs'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { setNotification } from '../reducers/notifReducer'
 import { createBlog } from '../reducers/blogReducer'
