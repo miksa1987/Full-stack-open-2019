@@ -31,11 +31,6 @@ const Message = ( props ) => {
   }
 }
 
-Message.propTypes = {
-  message: PropTypes.string.isRequired,
-  errorOn: PropTypes.bool.isRequired
-}
-
 const mapStateToProps = (state) => {
   return { message: state.message.message, error: state.message.error }
 }

@@ -1,53 +1,40 @@
 import React, { useState, useEffect } from 'react'
+import { connect } from 'react-redux'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
+
+import { setNotification } from './reducers/notifReducer'
+import { createBlog, initBlogs } from './reducers/blogReducer'
 
 import Loginform from './components/Loginform'
 import Newblogform from './components/Newblogform'
 import Message from './components/Message'
 import Togglabble from './components/Togglabble'
 
-const App = () => {
+const App = (props) => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
 
-  const [message, setMessage] = useState('')
-  const [errorOn, setErrorOn] = useState(false)
-
   const blogFormRef = React.createRef()
 
-  const nullMessage = () => {
-    setTimeout(() => {
-      setMessage('')
-      setErrorOn(false)
-    }, 5000)
-  }
   useEffect(() => {
-    blogService.getAll().then(blogs => {
-      blogs.sort(compareBlogs)
-      setBlogs( blogs )
-    })
-    
     if(window.localStorage.getItem('user') !== null) {
       setUser(JSON.parse(window.localStorage.getItem('user')))
     }
-  }, [])
+    console.log(props.blogs)
+    //blogService.getAll().then(r => console.log(r))
+  }, [props.blogs])
 
   useEffect(() => {
     if(user !== null && user.name && user.username && user.token) {
       console.log('LOGGED!')
       window.localStorage.setItem('user', JSON.stringify(user))
       blogService.setToken(user.token)
-      setMessage(`${user.name} logged on`)
-      nullMessage()
+      props.setNotification(`${user.name} logged on`, 5)
     }
-  }, [user])
+  })
 
-  const compareBlogs = (blog1, blog2) => {
-    if(blog1.likes !== blog2.likes) return blog2.likes - blog1.likes
-
-    return blog1.title > blog2.title
-  }
+  
 
   const logout = () => {
     setUser(null)
@@ -63,15 +50,14 @@ const App = () => {
   if(user) {
     return (
       <div>
-        <Message message={message} errorOn={errorOn} />
+        <Message />
         <h2>blogs</h2>
         <p>{user.name} logged in</p>
         <Togglabble buttonText='Add new blog' ref={blogFormRef}>
-          <Newblogform blogs={blogs} setBlogs={setBlogs} setMessage={setMessage} setErrorOn={setErrorOn} 
-            nullMessage={nullMessage} BlogFormRef={blogFormRef} />
+          <Newblogform BlogFormRef={blogFormRef} />
         </Togglabble>
         <button onClick={logout}>Log out</button><br/><br/>
-        {blogs.map(blog =>
+        {props.blogs.map(blog =>
           <Blog key={blog.id} blog={blog} user={user.id} removeBlog={removeBlog} />
         )}
       </div>
@@ -80,12 +66,21 @@ const App = () => {
 
   return (
     <div>
-      <Message message={message} errorOn={errorOn} 
-        setMessage={setMessage} setErrorOn={setErrorOn} nullMessage={nullMessage} />
+      <Message />
       <h2>Log in to applicationn</h2>
-      <Loginform setUser={setUser} setMessage={setMessage} setErrorOn={setErrorOn} nullMessage={nullMessage} />
+      <Loginform setUser={setUser} />
     </div>
   )
 }
 
-export default App
+const mapStateToProps = (state) => {
+  return { 
+    message: state.message,
+    blogs: state.blogs
+  }
+}
+
+const mapDispatchToProps = () => {
+  return { initBlogs, setNotification, createBlog }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(App)

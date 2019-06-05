@@ -34,11 +34,4 @@ const Loginform = ( props ) => {
   </div>)
 }
 
-Loginform.propTypes = {
-  setUser: PropTypes.func.isRequired,
-  setMessage: PropTypes.func.isRequired,
-  setErrorOn: PropTypes.func.isRequired,
-  nullMessage: PropTypes.func.isRequired
-}
-
 export default connect(null, { setNotification })(Loginform)

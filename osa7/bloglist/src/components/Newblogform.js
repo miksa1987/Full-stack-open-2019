@@ -3,6 +3,7 @@ import blogService from '../services/blogs'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { setNotification } from '../reducers/notifReducer'
+import { createBlog } from '../reducers/blogReducer'
 
 import useField from '../hooks/useField'
 
@@ -25,9 +26,8 @@ const Newblogform = ( props ) => {
         url: url.value,
         id: Math.floor(Math.random() * 100000)
       }
-      blogService.createNew(newBlog)
-      const newBlogs = props.blogs.concat(newBlog)
-      props.setBlogs(newBlogs)
+      props.createBlog(newBlog)
+      
       props.setNotification(`blog ${newBlog.title} created`, 5)
       
       try { 
@@ -51,13 +51,4 @@ const Newblogform = ( props ) => {
   </form></div> )
 }
 
-Newblogform.propTypes = {
-  blogs: PropTypes.array.isRequired,
-  setBlogs: PropTypes.func.isRequired,
-  BlogFormRef: PropTypes.object.isRequired,
-  setMessage: PropTypes.func.isRequired,
-  setErrorOn: PropTypes.func.isRequired,
-  nullMessage: PropTypes.func.isRequired
-}
-
-export default connect(null, { setNotification })(Newblogform)
+export default connect(null, { setNotification, createBlog })(Newblogform)
