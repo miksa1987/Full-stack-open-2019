@@ -9,6 +9,8 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-redux": "^7.0.3",
+    "react-router": "^5.0.1",
+    "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0"
@@ -37,6 +39,7 @@
   "proxy": "http://localhost:3001",
   "devDependencies": {
     "eslint-plugin-jest": "^22.5.1",
-    "react-testing-library": "^7.0.1"
+    "react-testing-library": "^7.0.1",
+    "redux-devtools-extension": "^2.13.8"
   }
 }

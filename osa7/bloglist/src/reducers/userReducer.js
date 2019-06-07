@@ -34,8 +34,8 @@ export const logout = () => {
 }
 
 export const setUser = (user) => {
-  return async dispatch => {
-    await dispatch({ type: 'SETUSER', data: user })
+  return dispatch => {
+    dispatch({ type: 'SETUSER', data: user })
   }
 }
 
