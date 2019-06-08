@@ -14,6 +14,7 @@ import Newblogform from './components/Newblogform'
 import Message from './components/Message'
 import Togglabble from './components/Togglabble'
 import Userlist from './components/Userlist'
+import User from './components/User'
 
 const Main = (props) => {
   return (<div>
@@ -63,6 +64,10 @@ const App = (props) => {
     window.localStorage.clear()
   }
 
+  const userById = (id) => {
+    return props.users.find(u => u.id === id)
+  }
+
   if(props.user) {
     return (
       <div>
@@ -72,7 +77,8 @@ const App = (props) => {
         <Link to='/'>MAIN</Link>
         <Link to='/users'>USERS</Link>
         <Route exact path='/' render={() => <Main user={props.user} blogFormRef={blogFormRef} blogs={props.blogs} /> }/>
-        <Route path='/users' render={() => <Userlist />} />
+        <Route exact path='/users' render={() => <Userlist />} />
+        <Route exact path='/users/:id' render={({match}) => <User user={userById(match.params.id)} /> } />
         </Router>
       </div>
     )
@@ -91,7 +97,8 @@ const mapStateToProps = (state) => {
   return { 
     message: state.message,
     blogs: state.blogs,
-    user: state.user
+    user: state.user,
+    users: state.allUsers
   }
 }
 
