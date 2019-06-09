@@ -11,6 +11,14 @@ const Blog = ( props ) => {
     props.updateBlog(blogToUpdate)
   }
 
+  const comment = (event) => {
+    event.preventDefault()
+    const newComments = [ ...props.blog.comments, event.target.say.value ]
+    const blogToUpdate = { ...props.blog, comments: newComments }
+    
+    props.updateBlog(blogToUpdate)
+  }
+
   const remove = async () => {
     if(window.confirm(`Poistetaanko ${props.blog.title}?`)) {
       props.removeBlog(props.blog.id)
@@ -34,6 +42,10 @@ const Blog = ( props ) => {
     <p>Added by {findUser(props.blog.user)}</p>
     {props.currentUser.id === props.blog.user ? 
     <button onClick={remove}>Remove blog</button> : null}
+    <h3>Comments</h3>
+    {props.blog.comments.length === 0 ? <p>No comments</p>
+    : props.blog.comments.map(c => <p key={Math.random() * 10000}>{c}</p>)}
+    <form onSubmit={comment}><input name='say' /><button type='submit'>Comment</button></form>
   </div> )
 }
 

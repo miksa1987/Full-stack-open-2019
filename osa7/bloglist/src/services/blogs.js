@@ -9,6 +9,7 @@ const setToken = (newtoken) => {
 }
 
 const createNew = (data) => {
+  console.log(token)
   const config = { headers: { Authorization: token } }
   const request = axios.post(baseUrl, data, config)
   return request.then(response => response.data)

@@ -24,6 +24,8 @@ export const login = (username, password) => {
                     token: response.data.token,
                     id: response.data.id}
     
+    blogService.setToken(response.data.token)
+    
     window.localStorage.setItem('user', JSON.stringify(user))
 
     dispatch({ type: 'LOGIN', data: user })
@@ -40,6 +42,7 @@ export const logout = () => {
 
 export const setUser = (user) => {
   return dispatch => {
+    blogService.setToken(user.token)
     dispatch({ type: 'SETUSER', data: user })
   }
 }
