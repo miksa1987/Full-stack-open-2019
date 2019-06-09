@@ -1,0 +1,9 @@
+POST http://localhost:3001/api/blogs
+Content-type: application/json
+
+{
+  "name": "test",
+  "author": "Mika Laaksonen",
+  "url": "http://www.chaosandpain.com",
+  "likes": "5"
+}

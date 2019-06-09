@@ -1,0 +1,30 @@
+{
+  "name": "blogilista",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "NODE_ENV=test jest --verbose --runInBand",
+    "start": "node index.js",
+    "watch": "nodemon index.js"
+  },
+  "author": "Mika Laaksonen",
+  "license": "ISC",
+  "devDependencies": {
+    "cors": "^2.8.5",
+    "jest": "^24.8.0",
+    "nodemon": "^1.19.1",
+    "supertest": "^4.0.2"
+  },
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "dotenv": "^8.0.0",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.5.6",
+    "mongoose-unique-validator": "^2.0.3"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}
