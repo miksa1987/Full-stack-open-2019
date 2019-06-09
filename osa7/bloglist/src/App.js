@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
-import { BrowserRouter as Router, Route, Link} from 'react-router-dom'
-import blogService from './services/blogs'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 import { setNotification } from './reducers/notifReducer'
 import { createBlog, initBlogs } from './reducers/blogReducer'
@@ -15,70 +14,35 @@ import Message from './components/Message'
 import Togglabble from './components/Togglabble'
 import Userlist from './components/Userlist'
 import User from './components/User'
+import Menubar from './components/Menubar'
 
 const Main = (props) => {
   return (<div>
     <h2>blogs</h2>
-      <p>{props.user.name} logged in</p>
-      <Bloglist blogFormRef={props.blogFormRef} />
       <Togglabble buttonText='Add new blog' ref={props.blogFormRef}>
         <Newblogform BlogFormRef={props.blogFormRef} />
       </Togglabble>
-      <button onClick={logout}>Log out</button><br/><br/>
-      {props.blogs.map(blog =>
-      <Blog key={blog.id} blog={blog} user={blog.user} removeBlog={props.removeBlog} />
-    )}
+      <br/><br/>
+      <Bloglist blogFormRef={props.blogFormRef} />
   </div>)
 }
 
 const App = (props) => {
   const blogFormRef = React.createRef()
 
-  useEffect(() => {
-    if(window.localStorage.getItem('user') !== null) {
-      props.setUser(JSON.parse(window.localStorage.getItem('user')))
-    }
-    console.log(props.blogs)
-    //blogService.getAll().then(r => console.log(r))
-  }, [])
-
-  useEffect(() => {
-    props.initBlogs()
-    if(props.user !== null && props.user.name && props.user.username && props.user.token) {
-      window.localStorage.setItem('user', JSON.stringify(props.user))
-      blogService.setToken(props.user.token)
-      props.setNotification(`${props.user.name} logged on`, 5)
-    }
-  }, [])
-
-  const debug = () => {
-    console.log(props.blogs)
-    console.log(props.user)
-    const savedUser = window.localStorage.getItem('user')
-    console.log(savedUser)
-  }
-
-  const logout = () => {
-    props.logout()
-    blogService.setToken('')
-    window.localStorage.clear()
-  }
-
-  const userById = (id) => {
-    return props.users.find(u => u.id === id)
-  }
-
+  const userById = (id) => props.users.find(u => u.id === id)
+  const blogById = (id) => props.blogs.find(b => b.id === id)
+  
   if(props.user) {
     return (
       <div>
         <Message />
-        <button onClick={debug}>DEBUG</button>
         <Router>
-        <Link to='/'>MAIN</Link>
-        <Link to='/users'>USERS</Link>
-        <Route exact path='/' render={() => <Main user={props.user} blogFormRef={blogFormRef} blogs={props.blogs} /> }/>
+        <Menubar />
+        <Route exact path='/' render={() => <Main user={props.user} logout={props.logout} blogFormRef={blogFormRef} blogs={props.blogs} /> }/>
         <Route exact path='/users' render={() => <Userlist />} />
         <Route exact path='/users/:id' render={({match}) => <User user={userById(match.params.id)} /> } />
+        <Route exact path='/blogs/:id' render={({match}) => <Blog blog={blogById(match.params.id)} /> } />
         </Router>
       </div>
     )

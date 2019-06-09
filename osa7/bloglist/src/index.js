@@ -8,7 +8,7 @@ import axios from 'axios'
 import blogService from './services/blogs'
 import notifReducer from './reducers/notifReducer'
 import blogReducer from './reducers/blogReducer'
-import userReducer from './reducers/userReducer'
+import userReducer, { setUser } from './reducers/userReducer'
 import { init } from './reducers/blogReducer'
 import usersReducer, { initUsers } from './reducers/usersReducer'
 
@@ -24,6 +24,11 @@ const store = createStore(reducer, applyMiddleware(thunk))
 
 const renderApp = () => {
   ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'))
+}
+
+const user = window.localStorage.getItem('user')
+if(user !== undefined) {
+  store.dispatch(setUser(JSON.parse(user)))
 }
 
 blogService.getAll().then(blogs => store.dispatch(init(blogs)))

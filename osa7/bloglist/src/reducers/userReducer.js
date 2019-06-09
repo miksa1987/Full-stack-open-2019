@@ -1,4 +1,5 @@
 import axios from 'axios'
+import blogService from '../services/blogs'
 
 const userReducer = (state = null, action) => {
   console.log(action.data)
@@ -22,6 +23,8 @@ export const login = (username, password) => {
                     username: response.data.username,
                     token: response.data.token,
                     id: response.data.id}
+    
+    window.localStorage.setItem('user', JSON.stringify(user))
 
     dispatch({ type: 'LOGIN', data: user })
   }
@@ -29,6 +32,8 @@ export const login = (username, password) => {
 
 export const logout = () => {
   return dispatch => {
+    window.localStorage.clear()
+    blogService.setToken('')
     dispatch({ type: 'LOGOUT' })
   }
 }

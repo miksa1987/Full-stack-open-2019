@@ -7,8 +7,6 @@ const compareBlogs = (blog1, blog2) => {
 }
 
 const blogReducer = (state = [], action) => {
-  console.log(action.data)
-  console.log(action.type)
   switch(action.type) {
     case 'INIT_BLOGS':
       return action.data
