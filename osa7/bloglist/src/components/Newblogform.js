@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Input, Button } from 'semantic-ui-react'
 import { setNotification } from '../reducers/notifReducer'
 import { createBlog } from '../reducers/blogReducer'
 
@@ -22,6 +23,7 @@ const Newblogform = ( props ) => {
         title: title.value,
         author: author.value,
         url: url.value,
+        comments: [ 'first', 'wanha' ],
         id: Math.floor(Math.random() * 100000)
       }
       props.createBlog(newBlog)
@@ -42,10 +44,10 @@ const Newblogform = ( props ) => {
   }
 
   return ( <div><h4>Submit new blog</h4><form onSubmit={sendNewBlog}>
-    Title <input {...modtitle} /><br/>
-    Author<input {...modauthor} /><br/>
-    URL <input {...modurl} /><br/>
-    <button type='submit'>Add</button>
+    Title <Input {...modtitle} /><br/>
+    Author<Input {...modauthor} /><br/>
+    URL <Input {...modurl} /><br/>
+    <Button type='submit'>Add</Button>
   </form></div> )
 }
 

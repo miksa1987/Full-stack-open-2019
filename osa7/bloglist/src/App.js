@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
-
 import { setNotification } from './reducers/notifReducer'
 import { createBlog, initBlogs } from './reducers/blogReducer'
 import { setUser, logout } from './reducers/userReducer'
@@ -18,7 +17,6 @@ import Menubar from './components/Menubar'
 
 const Main = (props) => {
   return (<div>
-    <h2>blogs</h2>
       <Togglabble buttonText='Add new blog' ref={props.blogFormRef}>
         <Newblogform BlogFormRef={props.blogFormRef} />
       </Togglabble>
@@ -30,12 +28,17 @@ const Main = (props) => {
 const App = (props) => {
   const blogFormRef = React.createRef()
 
+  const style = {
+    width: '90%',
+    margin: 'auto'
+  }
+
   const userById = (id) => props.users.find(u => u.id === id)
   const blogById = (id) => props.blogs.find(b => b.id === id)
   
   if(props.user) {
     return (
-      <div>
+      <div style={style}>
         <Message />
         <Router>
         <Menubar />
@@ -49,7 +52,7 @@ const App = (props) => {
   }
 
   return (
-    <div>
+    <div style={style}>
       <Message />
       <h2>Log in to applicationn</h2>
       <Loginform />

@@ -27,7 +27,7 @@ const renderApp = () => {
 }
 
 const user = window.localStorage.getItem('user')
-if(user !== undefined) {
+if(user) {
   store.dispatch(setUser(JSON.parse(user)))
 }
 

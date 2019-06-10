@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { Button, Segment } from 'semantic-ui-react'
 import { logout } from '../reducers/userReducer'
 
 const Menubar = (props) => {
@@ -9,12 +10,12 @@ const Menubar = (props) => {
   }
 
   return ( 
-    <div>
+    <div><Segment>
     <Link style={padding} to='/'>Blogs</Link>
     <Link style={padding} to='/users'>Users</Link>
     {props.user.name} logged in
-    <button onClick={props.logout}>Log out</button>
-    </div>
+    <Button onClick={props.logout}>Log out</Button>
+    </Segment></div>
   )
 }
 

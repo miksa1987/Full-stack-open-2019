@@ -1,5 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Button, Input, Label } from 'semantic-ui-react'
+
 import { setNotification } from '../reducers/notifReducer'
 import { login, setUser } from '../reducers/userReducer'
 
@@ -14,9 +16,9 @@ const Loginform = ( props ) => {
 
   return ( <div>
     <form onSubmit={handleSubmit}>
-      <p>username  <input name='username' /></p>
-      <p>password  <input name='password' /></p>
-      <button type='submit'>Login</button>
+      <Label>username </Label> <Input name='username' />
+      <Label>password </Label> <Input name='password' />
+      <Button type='submit'>Login</Button>
     </form>
   </div>)
 }
