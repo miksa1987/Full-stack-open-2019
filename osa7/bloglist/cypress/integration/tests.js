@@ -1,4 +1,16 @@
 describe('Bloglist tests', () => {
+  beforeEach(() => {
+    cy.request('POST', 'http://localhost:3001/api/test/reset')
+
+    const user = {
+      name: 'Mika Laaksonen',
+      username: 'mlaaksonen',
+      password: 'secret'
+    }
+
+    cy.request('POST', 'http://localhost:3001/api/users', user)
+  })
+
   it('user can log in', () => {
     cy.visit('http://localhost:3000')
     cy.get('#username')
