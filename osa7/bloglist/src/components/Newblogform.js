@@ -44,9 +44,9 @@ const Newblogform = ( props ) => {
   }
 
   return ( <div><h4>Submit new blog</h4><form onSubmit={sendNewBlog}>
-    Title <Input {...modtitle} /><br/>
-    Author<Input {...modauthor} /><br/>
-    URL <Input {...modurl} /><br/>
+    Title <Input id='title'{...modtitle} /><br/>
+    Author<Input id='author' {...modauthor} /><br/>
+    URL <Input id='url' {...modurl} /><br/>
     <Button type='submit'>Add</Button>
   </form></div> )
 }

@@ -16,8 +16,8 @@ const Loginform = ( props ) => {
 
   return ( <div>
     <form onSubmit={handleSubmit}>
-      <Label>username </Label> <Input name='username' />
-      <Label>password </Label> <Input name='password' />
+      <Label>username </Label> <Input id='username' name='username' />
+      <Label>password </Label> <Input id='password' name='password' />
       <Button type='submit'>Login</Button>
     </form>
   </div>)
