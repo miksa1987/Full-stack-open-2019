@@ -9,6 +9,7 @@ const middleware = require('./util/middleware')
 const blogRouter = require('./controllers/blogRouter')
 const userRouter = require('./controllers/userRouter')
 const loginRouter = require('./controllers/loginRouter')
+const testRouter = require('./controllers/testRouter')
 
 mongoose.connect(config.mongoUrl, { useNewUrlParser: true })
 
@@ -19,5 +20,9 @@ app.use(middleware.tokenExtractor)
 app.use('/api/blogs', blogRouter)
 app.use('/api/users', userRouter)
 app.use('/api/login', loginRouter)
+
+if(config.NODE_ENV === 'test') {
+  app.use('/api/test', testRouter)
+}
 
 module.exports = app
