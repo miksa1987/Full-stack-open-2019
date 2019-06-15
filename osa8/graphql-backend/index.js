@@ -1,6 +1,7 @@
-const { ApolloServer, gql } = require('apollo-server')
+const { ApolloServer, UserInputError, gql } = require('apollo-server')
+const uuid = require('uuid/v1')
 
-const authors = [
+let authors = [
   {
     name: 'Robert Martin',
     id: "afa51ab0-344d-11e9-a414-719c6709cf3e",
@@ -31,7 +32,7 @@ const authors = [
  * Yksinkertaisuuden vuoksi tallennamme kuitenkin kirjan yhteyteen tekijän nimen
 */
 
-const books = [
+let books = [
   {
     title: 'Clean Code',
     published: 2008,
@@ -105,6 +106,15 @@ const typeDefs = gql`
     allBooks(author: String, genre: String): [Book]!
     allAuthors: [Author]!
   }
+
+  type Mutation {
+    addBook(
+      title: String!
+      author: String!
+      published: Int!
+      genres: [String!]!
+    ): Book
+  }
 `
 
 const resolvers = {
@@ -128,6 +138,24 @@ const resolvers = {
     born: (root) => {
       if(!root.born) return 0
       return root.born
+    }
+  },
+
+  Mutation: {
+    addBook: (root, args) => {
+      if(books.find(b => b.title === args.title)) {
+        throw new UserInputError('Book title must be unique')
+      }
+
+      if(!authors.find(a => a.name === args.author)) {
+        const newAuthor = {
+          name: args.author,
+          id: uuid()
+        }
+        authors = authors.concat(newAuthor)
+      }
+      const book = { ...args, id: uuid() }
+      books = books.concat(book)
     }
   }
 }
