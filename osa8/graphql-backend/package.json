@@ -1,0 +1,17 @@
+{
+  "name": "graphql-backend",
+  "version": "1.0.0",
+  "description": "Simple GraphQL backend. Full Stack Open 2019 exercise.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "nodemon index.js"
+  },
+  "author": "Mika Laaksonen",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^2.6.3",
+    "graphql": "^14.3.1",
+    "nodemon": "^1.19.1"
+  }
+}
