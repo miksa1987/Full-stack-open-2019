@@ -114,6 +114,11 @@ const typeDefs = gql`
       published: Int!
       genres: [String!]!
     ): Book
+  
+    editAuthor(
+      name: String!
+      setBornTo: Int!
+    ): Author
   }
 `
 
@@ -156,6 +161,21 @@ const resolvers = {
       }
       const book = { ...args, id: uuid() }
       books = books.concat(book)
+    },
+
+    editAuthor: (root, args) => {
+      if(!args.name || !args.setBornTo) {
+        throw new UserInputError('Name or setBornTo must be provided')
+      }
+
+      if(!authors.find(a => a.name === args.name)) return null
+
+      const author = authors.find(a => a.name === args.name)
+      const authorToEdit = { ...author, born: args.setBornTo }
+
+      authors = authors.map(a => a.id === authorToEdit.id ? authorToEdit : a )
+
+      return authorToEdit
     }
   }
 }
