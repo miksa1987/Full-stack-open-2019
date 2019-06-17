@@ -13,9 +13,9 @@ const NewBook = (props) => {
 
   const submit = async (e) => {
     e.preventDefault()
+    console.log(genres)
     
-    console.log('add book...')
-
+    props.addBook({variables: { title, author, published, genres }})
     setTitle('')
     setPublished('')
     setAuhtor('')
@@ -50,7 +50,7 @@ const NewBook = (props) => {
           <input
             type='number'
             value={published}
-            onChange={({ target }) => setPublished(target.value)}
+            onChange={({ target }) => setPublished(Number(target.value))}
           />
         </div>
         <div>
