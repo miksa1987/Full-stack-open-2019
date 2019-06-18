@@ -1,18 +1,21 @@
 import React from 'react'
-import { gql } from 'apollo-boost'
-import { useQuery } from 'react-apollo-hooks'
-
-const ALL_AUTHORS = gql`
-{
-  allAuthors {
-    name
-    born
-    bookCount
-  }
-}`
+import { useQuery, useMutation } from 'react-apollo-hooks'
+import queries from '../util/queries'
+import mutations from '../util/mutations'
 
 const Authors = (props) => {
-  const result = useQuery(ALL_AUTHORS)
+  const result = useQuery(queries.ALL_AUTHORS)
+  const editAuthor = useMutation(mutations.EDIT_AUTHOR,
+    { refetchQueries: [{ query: queries.ALL_AUTHORS }]
+  })
+
+  const updateAuthor = (e) => {
+    e.preventDefault()
+    const name = e.target.author.value
+    const setBornTo = Number(e.target.setBornTo.value)
+
+    editAuthor({ variables: { name, setBornTo  }})
+  }
 
   if (!props.show) {
     return null
@@ -45,6 +48,14 @@ const Authors = (props) => {
           )}
         </tbody>
       </table>
+      <form onSubmit={updateAuthor}>
+        <select name='author'>
+          {result.loading ? null : result.data.allAuthors.map(a =>
+            <option key={a.name} value={a.name}>{a.name}</option>)}
+        </select>
+        Born <input name='setBornTo' />
+        <button type='submit'>Update author</button>
+      </form>
 
     </div>
   )
