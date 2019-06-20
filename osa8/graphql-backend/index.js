@@ -1,94 +1,15 @@
 const { ApolloServer, UserInputError, gql } = require('apollo-server')
 const uuid = require('uuid/v1')
-
-let authors = [
-  {
-    name: 'Robert Martin',
-    id: "afa51ab0-344d-11e9-a414-719c6709cf3e",
-    born: 1952,
-  },
-  {
-    name: 'Martin Fowler',
-    id: "afa5b6f0-344d-11e9-a414-719c6709cf3e",
-    born: 1963
-  },
-  {
-    name: 'Fyodor Dostoevsky',
-    id: "afa5b6f1-344d-11e9-a414-719c6709cf3e",
-    born: 1821
-  },
-  { 
-    name: 'Joshua Kerievsky', // birthyear not known
-    id: "afa5b6f2-344d-11e9-a414-719c6709cf3e",
-  },
-  { 
-    name: 'Sandi Metz', // birthyear not known
-    id: "afa5b6f3-344d-11e9-a414-719c6709cf3e",
-  },
-]
-
-/*
- * Saattaisi olla järkevämpää assosioida kirja ja sen tekijä tallettamalla kirjan yhteyteen tekijän nimen sijaan tekijän id
- * Yksinkertaisuuden vuoksi tallennamme kuitenkin kirjan yhteyteen tekijän nimen
-*/
-
-let books = [
-  {
-    title: 'Clean Code',
-    published: 2008,
-    author: 'Robert Martin',
-    id: "afa5b6f4-344d-11e9-a414-719c6709cf3e",
-    genres: ['refactoring']
-  },
-  {
-    title: 'Agile software development',
-    published: 2002,
-    author: 'Robert Martin',
-    id: "afa5b6f5-344d-11e9-a414-719c6709cf3e",
-    genres: ['agile', 'patterns', 'design']
-  },
-  {
-    title: 'Refactoring, edition 2',
-    published: 2018,
-    author: 'Martin Fowler',
-    id: "afa5de00-344d-11e9-a414-719c6709cf3e",
-    genres: ['refactoring']
-  },
-  {
-    title: 'Refactoring to patterns',
-    published: 2008,
-    author: 'Joshua Kerievsky',
-    id: "afa5de01-344d-11e9-a414-719c6709cf3e",
-    genres: ['refactoring', 'patterns']
-  },  
-  {
-    title: 'Practical Object-Oriented Design, An Agile Primer Using Ruby',
-    published: 2012,
-    author: 'Sandi Metz',
-    id: "afa5de02-344d-11e9-a414-719c6709cf3e",
-    genres: ['refactoring', 'design']
-  },
-  {
-    title: 'Crime and punishment',
-    published: 1866,
-    author: 'Fyodor Dostoevsky',
-    id: "afa5de03-344d-11e9-a414-719c6709cf3e",
-    genres: ['classic', 'crime']
-  },
-  {
-    title: 'The Demon ',
-    published: 1872,
-    author: 'Fyodor Dostoevsky',
-    id: "afa5de04-344d-11e9-a414-719c6709cf3e",
-    genres: ['classic', 'revolution']
-  },
-]
+const mongoose = require('mongoose')
+const Author = require('./models/Author')
+const Book = require('./models/Book')
+const config = require('./util/config')
 
 const typeDefs = gql`
   type Book {
     title: String!
     published: Int!
-    author: String!
+    author: Author!
     id: ID!
     genres: [String!]!
   }
@@ -124,21 +45,22 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    bookCount:    () => books.length,
-    authorCount:  () => authors.length,
-    allBooks:     (root, args) => {
-      if(!args.author && !args.genre) return books
-      if(args.author) return books.filter(b => b.author === args.author)
+    bookCount:    async () => await Book.find({}).length,
+    authorCount:  async () => await Author.find({}).length,
+    allBooks:     async (root, args) => {
+      if(!args.author && !args.genre) return await Book.find({})
+      if(args.author) return await Book.find({ author: Author.find({ name: args.author }) })
       
       return books.filter(b => b.genres.indexOf(args.genre) > -1)
     },
-    allAuthors:   () => authors
+    allAuthors:   async () => { 
+      return await Author.find({}) 
+    }
   },
 
   Author: {
     bookCount: (root) => {
-      const authorsBooks = books.filter(b => b.author === root.name)
-      return authorsBooks.length
+      return Book.find({ author: Author.find({ name: root.name }) })
     },
     born: (root) => {
       if(!root.born) return 0
@@ -148,19 +70,15 @@ const resolvers = {
 
   Mutation: {
     addBook: (root, args) => {
-      if(books.find(b => b.title === args.title)) {
-        throw new UserInputError('Book title must be unique')
+      if( Author.find({ name: args.author }) === [] ) {
+        const author = new Author({ name: args.author })
+        author.save()
       }
 
-      if(!authors.find(a => a.name === args.author)) {
-        const newAuthor = {
-          name: args.author,
-          id: uuid()
-        }
-        authors = authors.concat(newAuthor)
-      }
-      const book = { ...args, id: uuid() }
-      books = books.concat(book)
+      const book = new Book({ ...args, author: Author.find({ name: args.author }) })
+      book.save()
+
+      return book
     },
 
     editAuthor: (root, args) => {
@@ -168,14 +86,11 @@ const resolvers = {
         throw new UserInputError('Name or setBornTo must be provided')
       }
 
-      if(!authors.find(a => a.name === args.name)) return null
-
-      const author = authors.find(a => a.name === args.name)
-      const authorToEdit = { ...author, born: args.setBornTo }
-
-      authors = authors.map(a => a.id === authorToEdit.id ? authorToEdit : a )
-
-      return authorToEdit
+      const author = Author.findOne({ name: args.name })
+      author.born = args.setBornTo
+      author.save()
+      
+      return author
     }
   }
 }
@@ -184,6 +99,10 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
 })
+mongoose.set('useCreateIndex', true)
+mongoose.connect(config.MONGO_URI, {useNewUrlParser: true})
+  .then(s => console.log('Connected to MongoDB'))
+  .catch(e => console.log(e))
 
 server.listen().then(({ url }) => {
   console.log(`Server ready at ${url}`)
