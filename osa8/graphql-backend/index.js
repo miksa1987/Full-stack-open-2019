@@ -53,14 +53,12 @@ const resolvers = {
       
       return books.filter(b => b.genres.indexOf(args.genre) > -1)
     },
-    allAuthors:   async () => { 
-      return await Author.find({}) 
-    }
+    allAuthors:   async () => await Author.find({})
   },
 
   Author: {
-    bookCount: (root) => {
-      return Book.find({ author: Author.find({ name: root.name }) })
+    bookCount: async (root) => {
+      return await Book.find({ author: await Author.find({ name: root.name }) }).length
     },
     born: (root) => {
       if(!root.born) return 0
@@ -69,24 +67,29 @@ const resolvers = {
   },
 
   Mutation: {
-    addBook: (root, args) => {
-      if( Author.find({ name: args.author }) === [] ) {
-        const author = new Author({ name: args.author })
-        author.save()
-      }
+    addBook: async (root, args) => {
+      let newAuthor = await Author.findOne({ name: args.author })
+      console.log(newAuthor)
+      if( newAuthor === null ) {
+        newAuthor = await new Author({ name: args.author })
+        await newAuthor.save()
+      } 
 
-      const book = new Book({ ...args, author: Author.find({ name: args.author }) })
-      book.save()
+      const book = new Book({ ...args, author: newAuthor._id })
+        .populate('author')
 
+      await book.save()
+      await console.log(book)
       return book
     },
 
-    editAuthor: (root, args) => {
+    editAuthor: async (root, args) => {
       if(!args.name || !args.setBornTo) {
         throw new UserInputError('Name or setBornTo must be provided')
       }
 
-      const author = Author.findOne({ name: args.name })
+      const author = await Author.findOne({ name: args.name })
+      console.log(author)
       author.born = args.setBornTo
       author.save()
       
