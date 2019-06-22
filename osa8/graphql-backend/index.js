@@ -45,20 +45,37 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    bookCount:    async () => await Book.find({}).length,
-    authorCount:  async () => await Author.find({}).length,
+    bookCount:    async () => {
+      const books = await Book.find({})
+      return books.length
+    },
+    authorCount:  async () => {
+      const authors = await Author.find({})
+      return authors.length
+    },
     allBooks:     async (root, args) => {
-      if(!args.author && !args.genre) return await Book.find({})
-      if(args.author) return await Book.find({ author: Author.find({ name: args.author }) })
+      if(!args.author && !args.genre) {
+        const books = await Book.find({})
+          .populate('author')
+        return books
+      }
+      if(args.author) {
+        const books = await Book.find({ author: Author.find({ name: args.author }) })
+          .populate('author')
+        return books
+      }
       
-      return books.filter(b => b.genres.indexOf(args.genre) > -1)
+      const books = await Book.find({}).populate('author')
+      const filteredBooks = books.filter(b => b.genre.indexOf(args.genre) > -1)
+      return filteredBooks
     },
     allAuthors:   async () => await Author.find({})
   },
 
   Author: {
     bookCount: async (root) => {
-      return await Book.find({ author: await Author.find({ name: root.name }) }).length
+      const books = await Book.find({ author: await Author.find({ name: root.name }) })
+      return books.length
     },
     born: (root) => {
       if(!root.born) return 0
@@ -91,7 +108,7 @@ const resolvers = {
       const author = await Author.findOne({ name: args.name })
       console.log(author)
       author.born = args.setBornTo
-      author.save()
+      await author.save()
       
       return author
     }
