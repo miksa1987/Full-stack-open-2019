@@ -21,11 +21,22 @@ const typeDefs = gql`
     bookCount: Int!
   }
 
+  type User {
+    username: String!
+    favoriteGenre: String!
+    id: ID!
+  }
+  
+  type Token {
+    value: String!
+  }
+  
   type Query {
     bookCount: Int!
     authorCount: Int!
     allBooks(author: String, genre: String): [Book]!
     allAuthors: [Author]!
+    me: User
   }
 
   type Mutation {
@@ -40,6 +51,15 @@ const typeDefs = gql`
       name: String!
       setBornTo: Int!
     ): Author
+
+    createUser(
+      username: String!
+      favoriteGenre: String!
+    ): User
+    login(
+      username: String!
+      password: String!
+    ): Token
   }
 `
 
@@ -60,13 +80,14 @@ const resolvers = {
         return books
       }
       if(args.author) {
-        const books = await Book.find({ author: Author.find({ name: args.author }) })
+        const books = await Book.find({})
           .populate('author')
-        return books
+        const authorBooks = books.filter(b => b.author.name === args.author)
+        return authorBooks
       }
       
       const books = await Book.find({}).populate('author')
-      const filteredBooks = books.filter(b => b.genre.indexOf(args.genre) > -1)
+      const filteredBooks = books.filter(b => b.genres.indexOf(args.genre) > -1)
       return filteredBooks
     },
     allAuthors:   async () => await Author.find({})
