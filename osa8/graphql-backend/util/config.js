@@ -1,5 +1,6 @@
 require('dotenv').config()
 
 const MONGO_URI=process.env.MONGODB_URI
+const JWT_SECRET=process.env.JWT_SECRET
 
-module.exports = { MONGO_URI }
+module.exports = { MONGO_URI, JWT_SECRET }
