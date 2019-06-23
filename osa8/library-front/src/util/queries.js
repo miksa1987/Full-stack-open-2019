@@ -1,5 +1,13 @@
 import { gql } from 'apollo-boost'
 
+const FAVEGENRE = gql`
+{
+  me {
+    favoriteGenre
+  }
+}
+`
+
 const ALL_AUTHORS = gql`
 {
   allAuthors {
@@ -38,4 +46,4 @@ const ALL_GENRES = gql`
   allGenres
 }
 `
-export default { ALL_AUTHORS, ALL_BOOKS, ALL_GENRES, GENRE_BOOKS }
+export default { ALL_AUTHORS, ALL_BOOKS, ALL_GENRES, GENRE_BOOKS, FAVEGENRE }

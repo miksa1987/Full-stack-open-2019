@@ -5,6 +5,7 @@ import Login from './components/Login'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
+import Recommended from './components/Recommended'
 import queries from './util/queries'
 import mutations from './util/mutations'
 
@@ -41,6 +42,7 @@ const App = () => {
         <button onClick={() => setPage('authors')}>authors</button>
         <button onClick={() => setPage('books')}>books</button>
         {token === null ? null : <button onClick={() => setPage('add')}>add book</button>}
+        {token === null ? null : <button onClick={() => setPage('recommended')}>recommended</button>}
         {token === null ? <button onClick={() => setPage('login')}>login</button>
           : <button onClick={logout}>log out</button>}
       </div>
@@ -57,6 +59,10 @@ const App = () => {
       <NewBook
         show={page === 'add'}
         addBook={addBook}
+      />
+
+      <Recommended
+        show={page === 'recommended'}
       />
 
       <Login 

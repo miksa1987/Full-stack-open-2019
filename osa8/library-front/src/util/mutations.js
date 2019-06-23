@@ -1,7 +1,7 @@
 import { gql } from 'apollo-boost'
 
 const ADD_BOOK = gql`
-mutation addBook($title: String!, $author: String!, $published: Int!, $genres: [String!]) {
+mutation addBook($title: String!, $author: String!, $published: Int!, $genres: [String!]!) {
   addBook(
     title: $title,
     author: $author,
