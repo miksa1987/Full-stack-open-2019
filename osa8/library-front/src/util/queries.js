@@ -13,7 +13,9 @@ const ALL_BOOKS = gql`
 {
   allBooks {
     title
-    author
+    author {
+      name
+    }
     published
   }
 }`
