@@ -48,14 +48,14 @@ const Authors = (props) => {
           )}
         </tbody>
       </table>
-      <form onSubmit={updateAuthor}>
+      {props.token === null ? null : <form onSubmit={updateAuthor}>
         <select name='author'>
           {result.loading ? null : result.data.allAuthors.map(a =>
             <option key={a.name} value={a.name}>{a.name}</option>)}
         </select>
         Born <input name='setBornTo' />
         <button type='submit'>Update author</button>
-      </form>
+      </form> }
 
     </div>
   )
