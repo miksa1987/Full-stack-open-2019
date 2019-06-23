@@ -1,10 +1,13 @@
 const { ApolloServer, UserInputError, AuthenticationError, gql } = require('apollo-server')
+const { PubSub } = require('apollo-server')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const Author = require('./models/Author')
 const Book = require('./models/Book')
 const User = require('./models/User')
 const config = require('./util/config')
+
+const pubsub = new PubSub()
 
 const typeDefs = gql`
   type Book {
@@ -36,8 +39,13 @@ const typeDefs = gql`
     bookCount: Int!
     authorCount: Int!
     allBooks(author: String, genre: String): [Book]!
+    allGenres: [String]!
     allAuthors: [Author]!
     me: User
+  }
+
+  type Subscription {
+    bookAdded: Book!
   }
 
   type Mutation {
@@ -91,6 +99,20 @@ const resolvers = {
       const filteredBooks = books.filter(b => b.genres.indexOf(args.genre) > -1)
       return filteredBooks
     },
+    allGenres: async (root, args) => {
+      const books = await Book.find({})
+      let genres = []
+
+      books.forEach(b => {
+        b.genres.forEach(g => {
+          if(genres.indexOf(g) < 0) {
+            genres.push(g)
+          }
+        })
+      })
+
+      return genres
+    },
     allAuthors:   async () => await Author.find({}),
     me: (root, args, context) => context.currentUser
   },
@@ -103,6 +125,12 @@ const resolvers = {
     born: (root) => {
       if(!root.born) return 0
       return root.born
+    }
+  },
+
+  Subscription: {
+    bookAdded: () => {
+      pubsub.asyncIterator(['BOOK_ADDED'])
     }
   },
 
@@ -125,7 +153,8 @@ const resolvers = {
         .populate('author')
 
       await book.save()
-      await console.log(book)
+      pubsub.publish('BOOK_ADDED', { bookAdded: book })
+      
       return book
     },
 
