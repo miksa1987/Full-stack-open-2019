@@ -11,13 +11,14 @@ import Recommended from './components/Recommended'
 import queries from './util/queries'
 import mutations from './util/mutations'
 
+
 const BOOK_ADDED = gql`
 subscription {
   bookAdded {
     title
     published
     author {
-      name
+      born
     }
   }
 }
@@ -86,13 +87,13 @@ const App = () => {
         setPage={setPage}
       />
       
-      <Subscription subscription={BOOK_ADDED}
+      <Subscription
+        subscription={BOOK_ADDED}
         onSubscriptionData={({subscriptionData}) => {
-          window.alert(`Book added ${subscriptionData}`)
-          console.log(subscriptionData)
-        }}>
-        {() => null}
-      </Subscription>
+          const bookAdded = subscriptionData.data.bookAdded.title
+          window.alert(`Book ${bookAdded} added!`)
+        }}
+      /> 
     </div>
   )
 }

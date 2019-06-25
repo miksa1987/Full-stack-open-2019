@@ -15,8 +15,8 @@ const Login = (props) => {
     const result = await props.login({ variables: { username: user, password: pass } })
     console.log(result)
     const token = result.data.login.value
-    props.setToken(`bearer ${token}`)
-    window.localStorage.setItem('library-token', `bearer ${token}`)
+    props.setToken(token)
+    window.localStorage.setItem('library-token', token)
     
     props.setPage('books')
   }
