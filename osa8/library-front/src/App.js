@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useMutation, useApolloClient } from 'react-apollo-hooks'
+import { Subscription } from 'react-apollo'
+import { gql } from 'apollo-boost'
 
 import Login from './components/Login'
 import Authors from './components/Authors'
@@ -8,6 +10,18 @@ import NewBook from './components/NewBook'
 import Recommended from './components/Recommended'
 import queries from './util/queries'
 import mutations from './util/mutations'
+
+const BOOK_ADDED = gql`
+subscription {
+  bookAdded {
+    title
+    published
+    author {
+      name
+    }
+  }
+}
+`
 
 const App = () => {
   const [page, setPage] = useState('books')
@@ -71,7 +85,14 @@ const App = () => {
         setToken={setToken}
         setPage={setPage}
       />
-
+      
+      <Subscription subscription={BOOK_ADDED}
+        onSubscriptionData={({subscriptionData}) => {
+          window.alert(`Book added ${subscriptionData}`)
+          console.log(subscriptionData)
+        }}>
+        {() => null}
+      </Subscription>
     </div>
   )
 }
