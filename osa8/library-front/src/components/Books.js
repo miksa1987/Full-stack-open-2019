@@ -3,8 +3,8 @@ import { useQuery } from 'react-apollo-hooks'
 import queries from '../util/queries'
 
 const Books = (props) => {
-  const result = useQuery(queries.ALL_BOOKS)
-  const gresult = useQuery(queries.ALL_GENRES)
+  const result = props.result
+  const gresult = props.gresult
   const [genre, setGenre] = useState('ALL')
 
   if (!props.show) {

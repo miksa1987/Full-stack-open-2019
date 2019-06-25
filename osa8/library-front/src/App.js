@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useMutation, useApolloClient } from 'react-apollo-hooks'
+import { useMutation, useQuery, useApolloClient } from 'react-apollo-hooks'
 import { Subscription } from 'react-apollo'
 import { gql } from 'apollo-boost'
 
@@ -18,7 +18,7 @@ subscription {
     title
     published
     author {
-      born
+      name
     }
   }
 }
@@ -27,12 +27,32 @@ subscription {
 const App = () => {
   const [page, setPage] = useState('books')
   const [token, setToken] = useState(null)
+  const result = useQuery(queries.ALL_BOOKS)
+  const gresult = useQuery(queries.ALL_GENRES)
 
   const client = useApolloClient()
 
   const addBook = useMutation(mutations.ADD_BOOK, {
     onError: () => { console.log('Shit happens.')},
-    refetchQueries: [ { query: queries.ALL_AUTHORS }, { query: queries.ALL_BOOKS }]
+    refetchQueries: [ { query: queries.ALL_AUTHORS }, { query: queries.ALL_BOOKS }],
+    update: (store, response) => {
+      let booksInStore = store.readQuery({ query: queries.ALL_BOOKS })
+      let genresInStore = store.readQuery({ query: queries.ALL_GENRES })
+      console.log(booksInStore)
+
+      if(!includedIn(booksInStore.allBooks, response.data.addBook)) {
+        booksInStore.allBooks.push(response.data.addBook)
+      
+        response.data.addBook.genres.forEach(g => {
+          if(genresInStore.allGenres.indexOf(g) < 0) {
+            genresInStore.allGenres.push(g)
+          }
+        })
+
+        client.writeQuery({ query: queries.ALL_BOOKS, data: booksInStore })
+        client.writeQuery({ query: queries.ALL_GENRES, data: genresInStore})
+      }
+    }
   })
 
   const login = useMutation(mutations.LOGIN, {
@@ -46,6 +66,9 @@ const App = () => {
     client.clearStore()
     setPage('authors')
   }
+
+  const includedIn = (set, object) => 
+    set.map(p => p.id).includes(object.id)    
 
   useEffect(() => {
     setToken(window.localStorage.getItem('library-token'))
@@ -69,6 +92,8 @@ const App = () => {
 
       <Books
         show={page === 'books'}
+        result={result}
+        gresult={gresult}
       />
 
       <NewBook
@@ -90,8 +115,25 @@ const App = () => {
       <Subscription
         subscription={BOOK_ADDED}
         onSubscriptionData={({subscriptionData}) => {
+          console.log(subscriptionData)
           const bookAdded = subscriptionData.data.bookAdded.title
-          window.alert(`Book ${bookAdded} added!`)
+          window.alert(`$Book {bookAdded} added!`)
+          let booksInStore = client.readQuery({ query: queries.ALL_BOOKS })
+          let genresInStore = client.readQuery({ query: queries.ALL_GENRES })
+          console.log(booksInStore)
+
+          if(!includedIn(booksInStore.allBooks, bookAdded)) {
+            booksInStore.allBooks.push(bookAdded)
+      
+            bookAdded.genres.forEach(g => {
+              if(genresInStore.allGenres.indexOf(g) < 0) {
+                genresInStore.allGenres.push(g)
+              }
+            })
+
+            client.writeQuery({ query: queries.ALL_BOOKS, data: booksInStore })
+            client.writeQuery({ query: queries.ALL_GENRES, data: genresInStore})
+          }
         }}
       /> 
     </div>
