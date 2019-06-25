@@ -117,7 +117,7 @@ const App = () => {
         onSubscriptionData={({subscriptionData}) => {
           console.log(subscriptionData)
           const bookAdded = subscriptionData.data.bookAdded.title
-          window.alert(`$Book {bookAdded} added!`)
+          window.alert(`Book ${bookAdded} added!`)
           let booksInStore = client.readQuery({ query: queries.ALL_BOOKS })
           let genresInStore = client.readQuery({ query: queries.ALL_GENRES })
           console.log(booksInStore)
